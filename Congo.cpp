@@ -635,6 +635,10 @@ void lionMoves(vector<vector<BoardState>> board, map<char, vector<pair<char, int
     moves.clear();
 }
 
+void zebraMoves(vector<vector<BoardState>> board, map<char, vector<pair<char, int>>> pieceList, char colourTurn)
+{
+}
+
 void sortPieces(map<char, vector<pair<char, int>>> &pieceList)
 {
     sort(pieceList['l'].begin(), pieceList['l'].end());
