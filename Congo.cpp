@@ -637,6 +637,187 @@ void lionMoves(vector<vector<BoardState>> board, map<char, vector<pair<char, int
 
 void zebraMoves(vector<vector<BoardState>> board, map<char, vector<pair<char, int>>> pieceList, char colourTurn)
 {
+    //init variables needed
+    vector<char> column = {'a', 'b', 'c', 'd', 'e', 'f', 'g'};
+    vector<pair<char, int>> temp;
+    vector<pair<char, int>> enemyTemp;
+    vector<pair<char, int>> moves;
+    int row = 0;
+    int col = 0;
+    bool onBoard = false;
+    bool black = false;
+    bool white = false;
+
+    // determine for which colour we are finding the moves for
+    if (colourTurn == 'b')
+    {
+        temp = pieceList['z'];
+        enemyTemp = pieceList['Z'];
+        black = true;
+    }
+    else
+    {
+        temp = pieceList['Z'];
+        enemyTemp = pieceList['z'];
+        white = true;
+    }
+
+    //find the index for the col
+    if (temp.size() > 0)
+    {
+        for (int j = 0; j < column.size(); j++)
+        {
+            if (temp[0].first == column[j])
+            {
+                col++;
+                break;
+            }
+            col++;
+        }
+    }
+    else
+    {
+        return;
+    }
+
+    // need to decrement both down by 1 to match the arrays starting at 0 rather than 1.
+    int cols = col - 1;
+    int rows = temp[0].second - 1;
+
+    if (colourTurn == 'b')
+    {
+        if (cols >= 2)
+        {
+            //left-2 and up-1
+            if (rows <= 5 && (board[rows + 1][cols - 2] <= 4 || board[rows + 1][cols - 2] >= 9))
+            {
+                moves.push_back(make_pair(column[cols - 2], rows + 2));
+            }
+            //left-2 and down-1
+            if (rows >= 1 && (board[rows - 1][cols - 2] <= 4 || board[rows - 1][cols - 2] >= 9))
+            {
+                moves.push_back(make_pair(column[cols - 2], rows));
+            }
+        }
+        //right
+        if (cols <= 4)
+        {
+            //right-2 and up-1
+            if (rows <= 5 && (board[rows + 1][cols + 2] <= 4 || board[rows + 1][cols + 2] >= 9))
+            {
+                moves.push_back(make_pair(column[cols + 2], rows + 2));
+            }
+            //right-2 and down-1
+            if (rows >= 1 && (board[rows - 1][cols + 2] <= 4 || board[rows - 1][cols + 2] >= 9))
+            {
+                moves.push_back(make_pair(column[cols + 2], rows));
+            }
+        }
+        //up
+        if (rows <= 4)
+        {
+            //up-2 and left-1
+            if (cols >= 1 && (board[rows + 2][cols - 1] <= 4 || board[rows + 2][cols - 1] >= 9))
+            {
+                moves.push_back(make_pair(column[cols - 1], rows + 3));
+            }
+            //up-2 and right-1
+            if (cols <= 5 && (board[rows + 2][cols + 1] <= 4 || board[rows + 2][cols + 1] >= 9))
+            {
+                moves.push_back(make_pair(column[cols + 1], rows + 3));
+            }
+        }
+        //down
+        if (rows >= 2)
+        {
+            //down-2 and left-1
+            if (cols >= 1 && (board[rows - 2][cols - 1] <= 4 || board[rows - 2][cols - 1] >= 9))
+            {
+                moves.push_back(make_pair(column[cols - 1], rows - 1));
+            }
+            //down-2 and right-1
+            if (cols <= 5 && (board[rows - 2][cols + 1] <= 4 || board[rows - 2][cols + 1] >= 9))
+            {
+                moves.push_back(make_pair(column[cols + 1], rows - 1));
+            }
+        }
+    }
+    else
+    {
+        if (cols >= 2)
+        {
+            //left-2 and up-1
+            if (rows <= 5 && (board[rows + 1][cols - 2] == 0 || board[rows + 1][cols - 2] >= 5))
+            {
+                moves.push_back(make_pair(column[cols - 2], rows + 2));
+            }
+            //left-2 and down-1
+            if (rows >= 1 && (board[rows - 1][cols - 2] <= 0 || board[rows - 1][cols - 2] >= 5))
+            {
+                moves.push_back(make_pair(column[cols - 2], rows));
+            }
+        }
+        //right
+        if (cols <= 4)
+        {
+            //right-2 and up-1
+            if (rows <= 5 && (board[rows + 1][cols + 2] <= 0 || board[rows + 1][cols + 2] >= 5))
+            {
+                moves.push_back(make_pair(column[cols + 2], rows + 2));
+            }
+            //right-2 and down-1
+            if (rows >= 1 && (board[rows - 1][cols + 2] <= 0 || board[rows - 1][cols + 2] >= 5))
+            {
+                moves.push_back(make_pair(column[cols + 2], rows));
+            }
+        }
+        //up
+        if (rows <= 4)
+        {
+            //up-2 and left-1
+            if (cols >= 1 && (board[rows + 2][cols - 1] <= 0 || board[rows + 2][cols - 1] >= 5))
+            {
+                moves.push_back(make_pair(column[cols - 1], rows + 3));
+            }
+            //up-2 and right-1
+            if (cols <= 5 && (board[rows + 2][cols + 1] <= 0 || board[rows + 2][cols + 1] >= 5))
+            {
+                moves.push_back(make_pair(column[cols + 1], rows + 3));
+            }
+        }
+        //down
+        if (rows >= 2)
+        {
+            //down-2 and left-1
+            if (cols >= 1 && (board[rows - 2][cols - 1] <= 0 || board[rows - 2][cols - 1] >= 5))
+            {
+                moves.push_back(make_pair(column[cols - 1], rows - 1));
+            }
+            //down-2 and right-1
+            if (cols <= 5 && (board[rows - 2][cols + 1] <= 0 || board[rows - 2][cols + 1] >= 5))
+            {
+                moves.push_back(make_pair(column[cols + 1], rows - 1));
+            }
+        }
+    }
+
+    sort(moves.begin(), moves.end());
+    for (int i = 0; i < moves.size(); i++)
+    {
+        //cout << board[temp[0].second - 1][row - 1] << endl;
+        if (i != moves.size() - 1)
+        {
+            cout << temp[0].first << temp[0].second << moves[i].first << moves[i].second << " ";
+        }
+        else
+        {
+            cout << temp[0].first << temp[0].second << moves[i].first << moves[i].second;
+        }
+    }
+
+    temp.clear();
+    enemyTemp.clear();
+    moves.clear();
 }
 
 void sortPieces(map<char, vector<pair<char, int>>> &pieceList)
@@ -711,8 +892,8 @@ int main()
         // cout << endl;
 
         //printBoard(board);
-        lionMoves(board, pieceList, colourTurn[i]);
-
+        //lionMoves(board, pieceList, colourTurn[i]);
+        zebraMoves(board, pieceList, colourTurn[i]);
         //clears the vecs
         pieceList.clear();
         for (auto &elem : board)
