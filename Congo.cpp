@@ -93,6 +93,26 @@ void printBoard(vector<vector<BoardState>> board)
     }
 }
 
+void sortPieces(map<char, vector<pair<char, int>>> &pieceList)
+{
+    sort(pieceList['l'].begin(), pieceList['l'].end());
+    sort(pieceList['L'].begin(), pieceList['L'].end());
+    sort(pieceList['e'].begin(), pieceList['e'].end());
+    sort(pieceList['E'].begin(), pieceList['E'].end());
+    sort(pieceList['z'].begin(), pieceList['z'].end());
+    sort(pieceList['Z'].begin(), pieceList['Z'].end());
+    sort(pieceList['p'].begin(), pieceList['p'].end());
+    sort(pieceList['P'].begin(), pieceList['P'].end());
+    sort(pieceList['s'].begin(), pieceList['s'].end());
+    sort(pieceList['S'].begin(), pieceList['S'].end());
+    sort(pieceList['m'].begin(), pieceList['m'].end());
+    sort(pieceList['M'].begin(), pieceList['M'].end());
+    sort(pieceList['c'].begin(), pieceList['c'].end());
+    sort(pieceList['C'].begin(), pieceList['C'].end());
+    sort(pieceList['g'].begin(), pieceList['g'].end());
+    sort(pieceList['G'].begin(), pieceList['G'].end());
+}
+
 void printPawns(map<char, vector<pair<char, int>>> pieceList)
 {
     sort(pieceList['P'].begin(), pieceList['P'].end());
@@ -644,22 +664,15 @@ void zebraMoves(vector<vector<BoardState>> board, map<char, vector<pair<char, in
     vector<pair<char, int>> moves;
     int row = 0;
     int col = 0;
-    bool onBoard = false;
-    bool black = false;
-    bool white = false;
 
     // determine for which colour we are finding the moves for
     if (colourTurn == 'b')
     {
         temp = pieceList['z'];
-        enemyTemp = pieceList['Z'];
-        black = true;
     }
     else
     {
         temp = pieceList['Z'];
-        enemyTemp = pieceList['z'];
-        white = true;
     }
 
     //find the index for the col
@@ -816,28 +829,301 @@ void zebraMoves(vector<vector<BoardState>> board, map<char, vector<pair<char, in
     }
 
     temp.clear();
-    enemyTemp.clear();
     moves.clear();
 }
 
-void sortPieces(map<char, vector<pair<char, int>>> &pieceList)
+void elephantMoves(vector<vector<BoardState>> board, map<char, vector<pair<char, int>>> pieceList, char colourTurn)
 {
-    sort(pieceList['l'].begin(), pieceList['l'].end());
-    sort(pieceList['L'].begin(), pieceList['L'].end());
-    sort(pieceList['e'].begin(), pieceList['e'].end());
-    sort(pieceList['E'].begin(), pieceList['E'].end());
-    sort(pieceList['z'].begin(), pieceList['z'].end());
-    sort(pieceList['Z'].begin(), pieceList['Z'].end());
-    sort(pieceList['p'].begin(), pieceList['p'].end());
-    sort(pieceList['P'].begin(), pieceList['P'].end());
-    sort(pieceList['s'].begin(), pieceList['s'].end());
-    sort(pieceList['S'].begin(), pieceList['S'].end());
-    sort(pieceList['m'].begin(), pieceList['m'].end());
-    sort(pieceList['M'].begin(), pieceList['M'].end());
-    sort(pieceList['c'].begin(), pieceList['c'].end());
-    sort(pieceList['C'].begin(), pieceList['C'].end());
-    sort(pieceList['g'].begin(), pieceList['g'].end());
-    sort(pieceList['G'].begin(), pieceList['G'].end());
+    //init variables needed
+    vector<char> column = {'a', 'b', 'c', 'd', 'e', 'f', 'g'};
+    vector<pair<char, int>> temp;
+    vector<pair<char, int>> enemyTemp;
+    vector<string> totalMoves;
+    int numPieces = 0;
+
+    // determine for which colour we are finding the moves for
+    if (colourTurn == 'b')
+    {
+        temp = pieceList['e'];
+        numPieces = temp.size();
+    }
+    else
+    {
+        temp = pieceList['E'];
+        numPieces = temp.size();
+    }
+
+    vector<vector<pair<char, int>>> moves(numPieces);
+
+    if (numPieces == 0)
+    {
+        return;
+    }
+    else
+    {
+        for (int i = 0; i < numPieces; i++)
+        {
+            int row = 0;
+            int col = 0;
+            //find the index for the col
+            for (int j = 0; j < column.size(); j++)
+            {
+                if (temp[i].first == column[j])
+                {
+                    col++; //remove ++ and take out -1 from below ?
+                    break;
+                }
+                col++;
+            }
+            // need to decrement both down by 1 to match the arrays starting at 0 rather than 1.
+            int cols = col - 1;
+            int rows = temp[i].second - 1;
+
+            if (colourTurn == 'b')
+            {
+                //left-2
+                if (cols >= 2 && (board[rows][cols - 2] <= 4 || board[rows][cols - 2] >= 9))
+                {
+                    moves[i].push_back(make_pair(column[cols - 2], rows + 1));
+                }
+                //left-1
+                if (cols >= 1 && (board[rows][cols - 1] <= 4 || board[rows][cols - 1] >= 9))
+                {
+                    moves[i].push_back(make_pair(column[cols - 1], rows + 1));
+                }
+                //right-2
+                if (cols <= 4 && (board[rows][cols + 2] <= 4 || board[rows][cols + 2] >= 9))
+                {
+                    moves[i].push_back(make_pair(column[cols + 2], rows + 1));
+                }
+                //right-1
+                if (cols <= 5 && (board[rows][cols + 1] <= 4 || board[rows][cols + 1] >= 9))
+                {
+                    moves[i].push_back(make_pair(column[cols + 1], rows + 1));
+                }
+                //up-2
+                if (rows <= 4 && (board[rows + 2][cols] <= 4 || board[rows + 2][cols] >= 9))
+                {
+                    moves[i].push_back((make_pair(column[cols], rows + 3)));
+                }
+                //up-1
+                if (rows <= 5 && (board[rows + 1][cols] <= 4 || board[rows + 1][cols] >= 9))
+                {
+                    moves[i].push_back((make_pair(column[cols], rows + 2)));
+                }
+                //down-2
+                if (rows >= 2 && (board[rows - 2][cols] <= 4 || board[rows - 2][cols] >= 9))
+                {
+                    moves[i].push_back((make_pair(column[cols], rows - 1)));
+                }
+                //down-1
+                if (rows >= 1 && (board[rows - 1][cols] <= 4 || board[rows - 1][cols] >= 9))
+                {
+                    moves[i].push_back((make_pair(column[cols], rows)));
+                }
+            }
+            else
+            {
+                //left-2
+                if (cols >= 2 && (board[rows][cols - 2] <= 0 || board[rows][cols - 2] >= 5))
+                {
+                    moves[i].push_back(make_pair(column[cols - 2], rows + 1));
+                }
+                //left-1
+                if (cols >= 1 && (board[rows][cols - 1] <= 0 || board[rows][cols - 1] >= 5))
+                {
+                    moves[i].push_back(make_pair(column[cols - 1], rows + 1));
+                }
+                //right-2
+                if (cols <= 4 && (board[rows][cols + 2] <= 0 || board[rows][cols + 2] >= 5))
+                {
+                    moves[i].push_back(make_pair(column[cols + 2], rows + 1));
+                }
+                //right-1
+                if (cols <= 5 && (board[rows][cols + 1] <= 0 || board[rows][cols + 1] >= 5))
+                {
+                    moves[i].push_back(make_pair(column[cols + 1], rows + 1));
+                }
+                //up-2
+                if (rows <= 4 && (board[rows + 2][cols] <= 0 || board[rows + 2][cols] >= 5))
+                {
+                    moves[i].push_back((make_pair(column[cols], rows + 3)));
+                }
+                //up-1
+                if (rows <= 5 && (board[rows + 1][cols] <= 0 || board[rows + 1][cols] >= 5))
+                {
+                    moves[i].push_back((make_pair(column[cols], rows + 2)));
+                }
+                //down-2
+                if (rows >= 2 && (board[rows - 2][cols] <= 0 || board[rows - 2][cols] >= 5))
+                {
+                    moves[i].push_back((make_pair(column[cols], rows - 1)));
+                }
+                //down-1
+                if (rows >= 1 && (board[rows - 1][cols] <= 0 || board[rows - 1][cols] >= 5))
+                {
+                    moves[i].push_back((make_pair(column[cols], rows)));
+                }
+            }
+        }
+
+        for (int i = 0; i < moves.size(); i++)
+        {
+
+            for (int j = 0; j < moves[i].size(); j++)
+            {
+                string moveString = "";
+                moveString += temp[i].first;
+                moveString += to_string(temp[i].second);
+                moveString += moves[i][j].first;
+                moveString += to_string(moves[i][j].second);
+
+                totalMoves.push_back(moveString);
+            }
+        }
+
+        sort(totalMoves.begin(), totalMoves.end());
+        for (int i = 0; i < totalMoves.size(); i++)
+        {
+            cout << totalMoves[i] << " ";
+        }
+
+        temp.clear();
+        moves.clear();
+    }
+}
+
+void pawnMoves(vector<vector<BoardState>> board, map<char, vector<pair<char, int>>> pieceList, char colourTurn)
+{
+    vector<char> column = {'a', 'b', 'c', 'd', 'e', 'f', 'g'};
+    vector<pair<char, int>> temp;
+    vector<pair<char, int>> enemyTemp;
+    vector<string> totalMoves;
+
+    int out = 0;
+    int numPieces = 0;
+
+    // determine for which colour we are finding the moves for
+    if (colourTurn == 'b')
+    {
+        temp = pieceList['p'];
+        numPieces = temp.size();
+    }
+    else
+    {
+        temp = pieceList['P'];
+        numPieces = temp.size();
+    }
+
+    vector<vector<pair<char, int>>> moves(numPieces);
+
+    if (numPieces == 0)
+    {
+        return;
+    }
+    else
+    {
+        for (int i = 0; i < numPieces; i++)
+        {
+            int row = 0;
+            int col = 0;
+            //find the index for the col
+            for (int j = 0; j < column.size(); j++)
+            {
+                if (temp[i].first == column[j])
+                {
+                    col++; //remove ++ and take out -1 from below ?
+                    break;
+                }
+                col++;
+            }
+            // need to decrement both down by 1 to match the arrays starting at 0 rather than 1.
+            int cols = col - 1;
+            int rows = temp[i].second - 1;
+
+            if (colourTurn == 'b')
+            {
+                //down-1
+                if (rows >= 1 && (board[rows - 1][cols] <= 4 || board[rows - 1][cols] >= 9))
+                {
+                    moves[i].push_back((make_pair(column[cols], rows)));
+                }
+                //down-left
+                if (rows >= 1 && cols >= 1 && (board[rows - 1][cols - 1] <= 4 || board[rows - 1][cols - 1] >= 9))
+                {
+                    //cout << "down-left" << endl;
+                    moves[i].push_back((make_pair(column[cols - 1], rows)));
+                }
+                //down-right
+                if (rows >= 1 && cols <= 5 && ((board[rows - 1][cols + 1] <= 4 || board[rows - 1][cols + 1] >= 9)))
+                {
+                    //cout << "down-right" << endl;
+                    moves[i].push_back((make_pair(column[cols + 1], rows)));
+                }
+                //past river up-1
+                if (rows <= 2 && (board[rows + 1][cols] <= 0 || board[rows + 1][cols] >= 9))
+                {
+                    moves[i].push_back((make_pair(column[cols], rows + 2)));
+                }
+                //past river up-2
+                if (rows <= 2 && (board[rows + 2][cols] <= 0 || board[rows + 2][cols] >= 9) && (board[rows + 1][cols] <= 0 || board[rows + 1][cols] >= 9))
+                {
+                    moves[i].push_back((make_pair(column[cols], rows + 3)));
+                }
+            }
+            else
+            {
+                //up-1
+                if (rows <= 5 && (board[rows + 1][cols] <= 0 || board[rows + 1][cols] >= 5))
+                {
+                    moves[i].push_back((make_pair(column[cols], rows + 2)));
+                }
+                //up-left
+                if (rows <= 5 && cols >= 1 && (board[rows + 1][cols - 1] <= 0 || board[rows + 1][cols - 1] >= 5))
+                {
+                    moves[i].push_back((make_pair(column[cols - 1], rows + 2)));
+                }
+                //up-right
+                if (rows <= 5 && cols <= 5 && ((board[rows + 1][cols + 1] <= 0 || board[rows + 1][cols + 1] >= 5)))
+                {
+                    moves[i].push_back((make_pair(column[cols + 1], rows + 2)));
+                }
+                //past river down-1
+                if (rows >= 4 && (board[rows - 1][cols] <= 0 || board[rows - 1][cols] >= 9))
+                {
+                    moves[i].push_back((make_pair(column[cols], rows)));
+                }
+                //past river down-2
+                if (rows >= 4 && (board[rows - 2][cols] <= 0 || board[rows - 2][cols] >= 9) && (board[rows - 1][cols] <= 0 || board[rows - 1][cols] >= 9))
+                {
+                    moves[i].push_back((make_pair(column[cols], rows - 1)));
+                }
+            }
+        }
+        for (int i = 0; i < moves.size(); i++)
+        {
+
+            for (int j = 0; j < moves[i].size(); j++)
+            {
+                string moveString = "";
+                moveString += temp[i].first;
+                moveString += to_string(temp[i].second);
+                moveString += moves[i][j].first;
+                moveString += to_string(moves[i][j].second);
+
+                totalMoves.push_back(moveString);
+            }
+        }
+
+        sort(totalMoves.begin(), totalMoves.end());
+        for (int i = 0; i < totalMoves.size(); i++)
+        {
+            cout << totalMoves[i] << " ";
+        }
+
+        temp.clear();
+        moves.clear();
+    }
 }
 
 int main()
@@ -893,7 +1179,10 @@ int main()
 
         //printBoard(board);
         //lionMoves(board, pieceList, colourTurn[i]);
-        zebraMoves(board, pieceList, colourTurn[i]);
+        //zebraMoves(board, pieceList, colourTurn[i]);
+        //elephantMoves(board, pieceList, colourTurn[i]);
+        pawnMoves(board, pieceList, colourTurn[i]);
+
         //clears the vecs
         pieceList.clear();
         for (auto &elem : board)
