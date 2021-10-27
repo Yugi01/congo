@@ -73,7 +73,7 @@ void boardSetup(vector<vector<BoardState>> &board)
     }
 }
 
-void makeFen(vector<vector<BoardState>> board, char colour, int turn)
+string makeFen(vector<vector<BoardState>> board, char colour, int turn)
 {
     int counter = 0;
     string out = "";
@@ -141,8 +141,16 @@ void makeFen(vector<vector<BoardState>> board, char colour, int turn)
     out += colour;
     out += " " + to_string(turn);
 
-    cout << out << endl;
+    return out;
+    //cout << out << endl;
 }
+
+// void updatePieces(int rows, int cols, vector<vector<BoardState>> board, map<char, vector<pair<char, int>>> &pieceList)
+// {
+//     if (board[rows][cols] == 1)
+//     {
+//     }
+// }
 
 // vector<string> makeFenArray(string fen)
 // {
@@ -1203,12 +1211,12 @@ void pawnMoves(vector<vector<BoardState>> board, map<char, vector<pair<char, int
     }
 }
 
-void doMove(vector<vector<BoardState>> &board, map<char, vector<pair<char, int>>> pieceList, string fen, char colourTurn, int &numTurn, string move)
+void doMove(vector<vector<BoardState>> &board, map<char, vector<pair<char, int>>> &pieceList, string fen, char &colourTurn, int &numTurn, string move)
 {
     vector<char> column = {'a', 'b', 'c', 'd', 'e', 'f', 'g'};
     int fCol = 0;
     int tCol = 0;
-
+    vector<string> riverPieces = {"-1", "-1", "-1", "-1", "-1", "-1", "-1"};
     //find the index for the col
     for (int j = 0; j < column.size(); j++)
     {
@@ -1229,20 +1237,84 @@ void doMove(vector<vector<BoardState>> &board, map<char, vector<pair<char, int>>
         tCol++;
     }
 
+    for (int i = 0; i < board[3].size(); i++)
+    {
+        if (colourTurn == 'b')
+        {
+            if ((board[3][i] >= 5 && board[3][i] <= 8))
+            {
+                riverPieces[i] = "B-here";
+            }
+        }
+        else
+        {
+            if (board[3][i] >= 1 && board[3][i] <= 4)
+            {
+                riverPieces[i] = "W-here";
+            }
+        }
+    }
+
     // need to decrement both down by 1 to match the arrays starting at 0 rather than 1.
     //works
 
     int fromCols = fCol - 1;
     int fromRows = ((int)move[1] - 48) - 1;
-    cout << fromRows << " " << fromCols << endl;
+    //cout << fromRows << " " << fromCols << endl;
 
     int toCols = tCol - 1;
     int toRows = ((int)move[3] - 48) - 1;
-    cout << toRows << " " << toCols << endl;
+    //cout << toRows << " " << toCols << endl;
 
     board[toRows][toCols] = board[fromRows][fromCols];
     board[fromRows][fromCols] = empty;
-    makeFen(board, colourTurn, numTurn);
+
+    for (int i = 0; i < board[3].size(); i++)
+    {
+        if (colourTurn == 'b')
+        {
+            if (board[3][i] >= 5 && board[3][i] <= 8 && riverPieces[i] == "B-here" || (fromRows == 3 && toRows == 3))
+            {
+                board[3][i] = river;
+            }
+        }
+        else
+        {
+            if (board[3][i] >= 1 && board[3][i] <= 4 && riverPieces[i] == "W-here" || (fromRows == 3 && toRows == 3))
+            {
+                board[3][i] = river;
+            }
+        }
+    }
+
+    if (colourTurn == 'b')
+    {
+        numTurn++;
+        colourTurn = 'w';
+    }
+    else
+    {
+        colourTurn = 'b';
+    }
+    fen = makeFen(board, colourTurn, numTurn);
+    cout << fen << endl;
+
+    pieceList.clear();
+
+    mapInit(pieceList, fen, board);
+
+    if (pieceList['l'].size() == 0)
+    {
+        cout << "White wins" << endl;
+    }
+    else if (pieceList['L'].size() == 0)
+    {
+        cout << "Black wins" << endl;
+    }
+    else
+    {
+        cout << "Continue" << endl;
+    }
 }
 
 int main()
@@ -1304,7 +1376,7 @@ int main()
         //elephantMoves(board, pieceList, colourTurn[i]);
         //pawnMoves(board, pieceList, colourTurn[i]);
         doMove(board, pieceList, fen[i], colourTurn[i], numTurn[i], move[i]);
-        printBoard(board);
+        //printBoard(board);
         //clears the vecs
         pieceList.clear();
         for (auto &elem : board)
@@ -1312,6 +1384,6 @@ int main()
             fill(elem.begin(), elem.end(), empty);
         }
 
-        cout << endl;
+        //cout << endl;
     }
 }
