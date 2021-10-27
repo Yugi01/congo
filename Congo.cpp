@@ -73,6 +73,83 @@ void boardSetup(vector<vector<BoardState>> &board)
     }
 }
 
+void makeFen(vector<vector<BoardState>> board, char colour, int turn)
+{
+    int counter = 0;
+    string out = "";
+    for (int i = board.size() - 1; i >= 0; i--)
+    {
+        for (int j = 0; j < board.size(); j++)
+        {
+            if (board[i][j] >= 1 && board[i][j] <= 8 && counter > 0)
+            {
+                out += to_string(counter);
+                counter = 0;
+            }
+            if (board[i][j] == 0 || board[i][j] >= 9)
+            {
+                counter++;
+                if (counter == 7 || j == board.size() - 1)
+                {
+                    out += to_string(counter);
+                }
+                else
+                {
+                    continue;
+                }
+            }
+            else if (board[i][j] == 1)
+            {
+                out += "L";
+            }
+            else if (board[i][j] == 2)
+            {
+                out += "E";
+            }
+            else if (board[i][j] == 3)
+            {
+                out += "Z";
+            }
+            else if (board[i][j] == 4)
+            {
+                out += "P";
+            }
+            else if (board[i][j] == 5)
+            {
+                out += "l";
+            }
+            else if (board[i][j] == 6)
+            {
+                out += "e";
+            }
+            else if (board[i][j] == 7)
+            {
+                out += "z";
+            }
+            else if (board[i][j] == 8)
+            {
+                out += "p";
+            }
+        }
+        counter = 0;
+        if (i != 0)
+        {
+            out += "/";
+        }
+    }
+    out += " ";
+    out += colour;
+    out += " " + to_string(turn);
+
+    cout << out << endl;
+}
+
+// vector<string> makeFenArray(string fen)
+// {
+//     vector<string> newFen(7);
+//     for()
+// }
+
 void printBoard(vector<vector<BoardState>> board)
 {
     //cout << board.size();
@@ -1126,6 +1203,48 @@ void pawnMoves(vector<vector<BoardState>> board, map<char, vector<pair<char, int
     }
 }
 
+void doMove(vector<vector<BoardState>> &board, map<char, vector<pair<char, int>>> pieceList, string fen, char colourTurn, int &numTurn, string move)
+{
+    vector<char> column = {'a', 'b', 'c', 'd', 'e', 'f', 'g'};
+    int fCol = 0;
+    int tCol = 0;
+
+    //find the index for the col
+    for (int j = 0; j < column.size(); j++)
+    {
+        if (move[0] == column[j])
+        {
+            fCol++;
+            break;
+        }
+        fCol++;
+    }
+    for (int j = 0; j < column.size(); j++)
+    {
+        if (move[2] == column[j])
+        {
+            tCol++;
+            break;
+        }
+        tCol++;
+    }
+
+    // need to decrement both down by 1 to match the arrays starting at 0 rather than 1.
+    //works
+
+    int fromCols = fCol - 1;
+    int fromRows = ((int)move[1] - 48) - 1;
+    cout << fromRows << " " << fromCols << endl;
+
+    int toCols = tCol - 1;
+    int toRows = ((int)move[3] - 48) - 1;
+    cout << toRows << " " << toCols << endl;
+
+    board[toRows][toCols] = board[fromRows][fromCols];
+    board[fromRows][fromCols] = empty;
+    makeFen(board, colourTurn, numTurn);
+}
+
 int main()
 {
     //black is lowercase
@@ -1138,12 +1257,14 @@ int main()
     vector<string> fen(n);
     vector<char> colourTurn(n);
     vector<int> numTurn(n);
+    vector<string> move(n);
 
     for (int i = 0; i < n; i++)
     {
         cin >> fen[i];
         cin >> colourTurn[i];
         cin >> numTurn[i];
+        cin >> move[i];
     }
 
     for (int i = 0; i < n; i++)
@@ -1181,8 +1302,9 @@ int main()
         //lionMoves(board, pieceList, colourTurn[i]);
         //zebraMoves(board, pieceList, colourTurn[i]);
         //elephantMoves(board, pieceList, colourTurn[i]);
-        pawnMoves(board, pieceList, colourTurn[i]);
-
+        //pawnMoves(board, pieceList, colourTurn[i]);
+        doMove(board, pieceList, fen[i], colourTurn[i], numTurn[i], move[i]);
+        printBoard(board);
         //clears the vecs
         pieceList.clear();
         for (auto &elem : board)
