@@ -1317,6 +1317,65 @@ void doMove(vector<vector<BoardState>> &board, map<char, vector<pair<char, int>>
     }
 }
 
+void scoreCheck(map<char, vector<pair<char, int>>> pieceList, char colourTurn)
+{
+    int score = 0;
+    bool game = false;
+    //white wins
+    if (colourTurn == 'b')
+    {
+        if (pieceList['l'].size() == 0)
+        {
+            score = -10000;
+            cout << score << endl;
+            game = true;
+        }
+        //black wins
+        else if (pieceList['L'].size() == 0)
+        {
+            score = 10000;
+            cout << score << endl;
+            game = true;
+        }
+    }
+    else
+    {
+        if (pieceList['l'].size() == 0)
+        {
+            score = 10000;
+            cout << score << endl;
+            game = true;
+        }
+        //black wins
+        else if (pieceList['L'].size() == 0)
+        {
+            score = -10000;
+            cout << score << endl;
+            game = true;
+        }
+    }
+
+    score += pieceList['p'].size() * 100;
+    score += pieceList['P'].size() * -100;
+    score += pieceList['e'].size() * 200;
+    score += pieceList['E'].size() * -200;
+    score += pieceList['z'].size() * 300;
+    score += pieceList['Z'].size() * -300;
+
+    if (!game)
+    {
+        if (colourTurn == 'b')
+        {
+            cout << score << endl;
+        }
+        else
+        {
+            score = -1 * score;
+            cout << score << endl;
+        }
+    }
+}
+
 int main()
 {
     //black is lowercase
@@ -1336,7 +1395,7 @@ int main()
         cin >> fen[i];
         cin >> colourTurn[i];
         cin >> numTurn[i];
-        cin >> move[i];
+        //cin >> move[i];
     }
 
     for (int i = 0; i < n; i++)
@@ -1375,8 +1434,10 @@ int main()
         //zebraMoves(board, pieceList, colourTurn[i]);
         //elephantMoves(board, pieceList, colourTurn[i]);
         //pawnMoves(board, pieceList, colourTurn[i]);
-        doMove(board, pieceList, fen[i], colourTurn[i], numTurn[i], move[i]);
+        //doMove(board, pieceList, fen[i], colourTurn[i], numTurn[i], move[i]);
+        scoreCheck(pieceList, colourTurn[i]);
         //printBoard(board);
+
         //clears the vecs
         pieceList.clear();
         for (auto &elem : board)
