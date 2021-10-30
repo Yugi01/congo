@@ -453,13 +453,15 @@ void mapInit(map<char, vector<pair<char, int>>> &pieceList, string fen, vector<v
     }
 }
 
-void lionMoves(vector<vector<BoardState>> board, map<char, vector<pair<char, int>>> pieceList, char colourTurn)
+vector<string> lionMoves(vector<vector<BoardState>> board, map<char, vector<pair<char, int>>> pieceList, char colourTurn)
 {
     //init variables needed
     vector<char> column = {'a', 'b', 'c', 'd', 'e', 'f', 'g'};
     vector<pair<char, int>> temp;
     vector<pair<char, int>> enemyTemp;
     vector<pair<char, int>> moves;
+    vector<string> allMoves;
+
     int row = 0;
     int col = 0;
 
@@ -723,30 +725,35 @@ void lionMoves(vector<vector<BoardState>> board, map<char, vector<pair<char, int
     // cout << endl
     //      << endl;
     sort(moves.begin(), moves.end());
+    allMoves.resize(moves.size());
     for (int i = 0; i < moves.size(); i++)
     {
         //cout << board[temp[0].second - 1][row - 1] << endl;
-        if (i != moves.size() - 1)
-        {
-            cout << temp[0].first << temp[0].second << moves[i].first << moves[i].second << " ";
-        }
-        else
-        {
-            cout << temp[0].first << temp[0].second << moves[i].first << moves[i].second;
-        }
+        //    if (i != moves.size() - 1)
+        //      {
+        //cout << temp[0].first << temp[0].second << moves[i].first << moves[i].second << " ";
+        allMoves[i] = temp[0].first + to_string(temp[0].second) + moves[i].first + to_string(moves[i].second);
+        //        }
+        // else
+        // {
+        //     //cout << temp[0].first << temp[0].second << moves[i].first << moves[i].second;
+        //     allMoves[i] = temp[0].first + temp[0].second + moves[i].first + moves[i].second;
+        // }
     }
-    temp.clear();
-    enemyTemp.clear();
-    moves.clear();
+    return allMoves;
+    // temp.clear();
+    // enemyTemp.clear();
+    // moves.clear();
 }
 
-void zebraMoves(vector<vector<BoardState>> board, map<char, vector<pair<char, int>>> pieceList, char colourTurn)
+vector<string> zebraMoves(vector<vector<BoardState>> board, map<char, vector<pair<char, int>>> pieceList, char colourTurn)
 {
     //init variables needed
     vector<char> column = {'a', 'b', 'c', 'd', 'e', 'f', 'g'};
     vector<pair<char, int>> temp;
     vector<pair<char, int>> enemyTemp;
     vector<pair<char, int>> moves;
+    vector<string> allMoves;
     int row = 0;
     int col = 0;
 
@@ -775,7 +782,7 @@ void zebraMoves(vector<vector<BoardState>> board, map<char, vector<pair<char, in
     }
     else
     {
-        return;
+        return allMoves;
     }
 
     // need to decrement both down by 1 to match the arrays starting at 0 rather than 1.
@@ -900,24 +907,28 @@ void zebraMoves(vector<vector<BoardState>> board, map<char, vector<pair<char, in
     }
 
     sort(moves.begin(), moves.end());
+    allMoves.resize(moves.size());
     for (int i = 0; i < moves.size(); i++)
     {
         //cout << board[temp[0].second - 1][row - 1] << endl;
-        if (i != moves.size() - 1)
-        {
-            cout << temp[0].first << temp[0].second << moves[i].first << moves[i].second << " ";
-        }
-        else
-        {
-            cout << temp[0].first << temp[0].second << moves[i].first << moves[i].second;
-        }
+        // if (i != moves.size() - 1)
+        // {
+        //cout << temp[0].first << temp[0].second << moves[i].first << moves[i].second << " ";
+        allMoves[i] = temp[0].first + to_string(temp[0].second) + moves[i].first + to_string(moves[i].second);
+        // }
+        // else
+        // {
+        //     //cout << temp[0].first << temp[0].second << moves[i].first << moves[i].second;
+        //     allMoves[i] = temp[0].first + temp[0].second + moves[i].first + moves[i].second;
+        // }
     }
+    return allMoves;
 
-    temp.clear();
-    moves.clear();
+    // temp.clear();
+    // moves.clear();
 }
 
-void elephantMoves(vector<vector<BoardState>> board, map<char, vector<pair<char, int>>> pieceList, char colourTurn)
+vector<string> elephantMoves(vector<vector<BoardState>> board, map<char, vector<pair<char, int>>> pieceList, char colourTurn)
 {
     //init variables needed
     vector<char> column = {'a', 'b', 'c', 'd', 'e', 'f', 'g'};
@@ -942,7 +953,7 @@ void elephantMoves(vector<vector<BoardState>> board, map<char, vector<pair<char,
 
     if (numPieces == 0)
     {
-        return;
+        return totalMoves;
     }
     else
     {
@@ -1068,17 +1079,18 @@ void elephantMoves(vector<vector<BoardState>> board, map<char, vector<pair<char,
         }
 
         sort(totalMoves.begin(), totalMoves.end());
-        for (int i = 0; i < totalMoves.size(); i++)
-        {
-            cout << totalMoves[i] << " ";
-        }
+        return totalMoves;
+        // for (int i = 0; i < totalMoves.size(); i++)
+        // {
+        //     cout << totalMoves[i] << " ";
+        // }
 
-        temp.clear();
-        moves.clear();
+        // temp.clear();
+        // moves.clear();
     }
 }
 
-void pawnMoves(vector<vector<BoardState>> board, map<char, vector<pair<char, int>>> pieceList, char colourTurn)
+vector<string> pawnMoves(vector<vector<BoardState>> board, map<char, vector<pair<char, int>>> pieceList, char colourTurn)
 {
     vector<char> column = {'a', 'b', 'c', 'd', 'e', 'f', 'g'};
     vector<pair<char, int>> temp;
@@ -1104,7 +1116,7 @@ void pawnMoves(vector<vector<BoardState>> board, map<char, vector<pair<char, int
 
     if (numPieces == 0)
     {
-        return;
+        return totalMoves;
     }
     else
     {
@@ -1201,17 +1213,40 @@ void pawnMoves(vector<vector<BoardState>> board, map<char, vector<pair<char, int
         }
 
         sort(totalMoves.begin(), totalMoves.end());
-        for (int i = 0; i < totalMoves.size(); i++)
-        {
-            cout << totalMoves[i] << " ";
-        }
+        return totalMoves;
+        // for (int i = 0; i < totalMoves.size(); i++)
+        // {
+        //     cout << totalMoves[i] << " ";
+        // }
 
-        temp.clear();
-        moves.clear();
+        // temp.clear();
+        // moves.clear();
     }
 }
 
-void doMove(vector<vector<BoardState>> &board, map<char, vector<pair<char, int>>> &pieceList, string fen, char &colourTurn, int &numTurn, string move)
+vector<string> allMoves(vector<vector<BoardState>> board, map<char, vector<pair<char, int>>> pieceList, char colourTurn)
+{
+    vector<string> lMoves = lionMoves(board, pieceList, colourTurn);
+    vector<string> zMoves = zebraMoves(board, pieceList, colourTurn);
+    vector<string> eMoves = elephantMoves(board, pieceList, colourTurn);
+    vector<string> pMoves = pawnMoves(board, pieceList, colourTurn);
+    vector<string> totalMoves;
+    totalMoves.insert(totalMoves.end(), lMoves.begin(), lMoves.end());
+    totalMoves.insert(totalMoves.end(), zMoves.begin(), zMoves.end());
+    totalMoves.insert(totalMoves.end(), eMoves.begin(), eMoves.end());
+    totalMoves.insert(totalMoves.end(), pMoves.begin(), pMoves.end());
+    // for (int i = 0; i < lMoves.size(); i++)
+    // {
+    //     cout << lMoves[i] << endl;
+    // }
+    // for (int i = 0; i < totalMoves.size(); i++)
+    // {
+    //     cout << totalMoves[i] << endl;
+    // }
+    return totalMoves;
+}
+
+string doMove(vector<vector<BoardState>> &board, map<char, vector<pair<char, int>>> &pieceList, string fen, char &colourTurn, int &numTurn, string move)
 {
     vector<char> column = {'a', 'b', 'c', 'd', 'e', 'f', 'g'};
     int fCol = 0;
@@ -1297,27 +1332,28 @@ void doMove(vector<vector<BoardState>> &board, map<char, vector<pair<char, int>>
         colourTurn = 'b';
     }
     fen = makeFen(board, colourTurn, numTurn);
-    cout << fen << endl;
+    //cout << fen << endl;
+    return fen;
 
-    pieceList.clear();
+    // pieceList.clear();
 
-    mapInit(pieceList, fen, board);
+    // mapInit(pieceList, fen, board);
 
-    if (pieceList['l'].size() == 0)
-    {
-        cout << "White wins" << endl;
-    }
-    else if (pieceList['L'].size() == 0)
-    {
-        cout << "Black wins" << endl;
-    }
-    else
-    {
-        cout << "Continue" << endl;
-    }
+    // if (pieceList['l'].size() == 0)
+    // {
+    //     cout << "White wins" << endl;
+    // }
+    // else if (pieceList['L'].size() == 0)
+    // {
+    //     cout << "Black wins" << endl;
+    // }
+    // else
+    // {
+    //     cout << "Continue" << endl;
+    // }
 }
 
-void scoreCheck(map<char, vector<pair<char, int>>> pieceList, char colourTurn)
+int scoreCheck(map<char, vector<pair<char, int>>> pieceList, char colourTurn)
 {
     int score = 0;
     bool game = false;
@@ -1326,32 +1362,32 @@ void scoreCheck(map<char, vector<pair<char, int>>> pieceList, char colourTurn)
     {
         if (pieceList['l'].size() == 0)
         {
-            score = -10000;
-            cout << score << endl;
-            game = true;
+            return -10000;
+            // cout << score << endl;
+            // game = true;
         }
         //black wins
         else if (pieceList['L'].size() == 0)
         {
-            score = 10000;
-            cout << score << endl;
-            game = true;
+            return 10000;
+            // cout << score << endl;
+            // game = true;
         }
     }
     else
     {
         if (pieceList['l'].size() == 0)
         {
-            score = 10000;
-            cout << score << endl;
-            game = true;
+            return 10000;
+            // cout << score << endl;
+            // game = true;
         }
         //black wins
         else if (pieceList['L'].size() == 0)
         {
-            score = -10000;
-            cout << score << endl;
-            game = true;
+            return -10000;
+            // cout << score << endl;
+            // game = true;
         }
     }
 
@@ -1362,18 +1398,36 @@ void scoreCheck(map<char, vector<pair<char, int>>> pieceList, char colourTurn)
     score += pieceList['z'].size() * 300;
     score += pieceList['Z'].size() * -300;
 
-    if (!game)
+    // if (!game)
+    // {
+    if (colourTurn == 'b')
     {
-        if (colourTurn == 'b')
-        {
-            cout << score << endl;
-        }
-        else
-        {
-            score = -1 * score;
-            cout << score << endl;
-        }
+        return score;
     }
+    else
+    {
+        score = -1 * score;
+        return score;
+    }
+    //}
+}
+
+int miniMax(vector<vector<BoardState>> &board, map<char, vector<pair<char, int>>> &pieceList, string fen, char &colourTurn, int &numTurn, int depth)
+{
+    if (scoreCheck(pieceList, colourTurn) == abs(10000) || depth <= 0)
+    {
+        return scoreCheck(pieceList, colourTurn);
+    }
+    int value = -10000000;
+    vector<string> moves = allMoves(board, pieceList, colourTurn);
+    for (string move : moves)
+    {
+        string nextState = doMove(board, pieceList, fen, colourTurn, numTurn, move);
+        int eval = -miniMax(board, pieceList, nextState, colourTurn, numTurn, (depth - 1));
+        value = max(value, eval);
+    }
+    //cout << value << endl;
+    return value;
 }
 
 int main()
@@ -1435,9 +1489,9 @@ int main()
         //elephantMoves(board, pieceList, colourTurn[i]);
         //pawnMoves(board, pieceList, colourTurn[i]);
         //doMove(board, pieceList, fen[i], colourTurn[i], numTurn[i], move[i]);
-        scoreCheck(pieceList, colourTurn[i]);
+        //scoreCheck(pieceList, colourTurn[i]);
         //printBoard(board);
-
+        cout << miniMax(board, pieceList, fen[i], colourTurn[i], numTurn[i], 2) << endl;
         //clears the vecs
         pieceList.clear();
         for (auto &elem : board)
