@@ -5,5 +5,6 @@
         "utility": "cpp",
         "tuple": "cpp",
         "vector": "cpp"
-    }
+    },
+    "C_Cpp.errorSquiggles": "Disabled"
 }

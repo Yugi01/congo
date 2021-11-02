@@ -9,6 +9,8 @@
 
 using namespace std;
 
+char startTurn;
+
 // void pieceListOutput(map<char, vector<pair<char, int>>> pieceList)
 // {
 //     for (auto ii = pieceList.begin(); ii != pieceList.end(); ++ii)
@@ -341,6 +343,109 @@ void printZebra(map<char, vector<pair<char, int>>> pieceList)
         cout << pieceList['z'][i].first << pieceList['z'][i].second << " ";
     }
     cout << endl;
+}
+
+map<char, vector<pair<char, int>>> updateFen(map<char, vector<pair<char, int>>> pieceList, string fen)
+{
+    int row = 7;
+    vector<char> col = {'a', 'b', 'c', 'd', 'e', 'f', 'g'};
+    vector<char> spaces = {'1', '2', '3', '4', '5', '6', '7'};
+    int colPos = 0;
+    bool num = false;
+
+    for (int i = 0; i < fen.length(); i++)
+    {
+        //should handle the numbers for spacing in the input
+        for (int j = 0; j < spaces.size(); j++)
+        {
+            if (fen[i] == spaces[j])
+            {
+                num = true;
+                colPos = colPos + (spaces[j] - '0');
+                break;
+            }
+        }
+
+        if (fen[i] == '/')
+        {
+            row--;
+            colPos = 0;
+            continue;
+        }
+        //black pieces
+        else if (fen[i] == 'p')
+        {
+            pieceList['p'].push_back(make_pair(col[colPos], row));
+        }
+        else if (fen[i] == 's')
+        {
+            pieceList['s'].push_back(make_pair(col[colPos], row));
+        }
+        else if (fen[i] == 'g')
+        {
+            pieceList['g'].push_back(make_pair(col[colPos], row));
+        }
+        else if (fen[i] == 'm')
+        {
+            pieceList['m'].push_back(make_pair(col[colPos], row));
+        }
+        else if (fen[i] == 'e')
+        {
+            pieceList['e'].push_back(make_pair(col[colPos], row));
+        }
+        else if (fen[i] == 'l')
+        {
+            pieceList['l'].push_back(make_pair(col[colPos], row));
+        }
+        else if (fen[i] == 'c')
+        {
+            pieceList['c'].push_back(make_pair(col[colPos], row));
+        }
+        else if (fen[i] == 'z')
+        {
+            pieceList['z'].push_back(make_pair(col[colPos], row));
+        }
+        //white pieces
+        else if (fen[i] == 'P')
+        {
+            pieceList['P'].push_back(make_pair(col[colPos], row));
+        }
+        else if (fen[i] == 'S')
+        {
+            pieceList['S'].push_back(make_pair(col[colPos], row));
+        }
+        else if (fen[i] == 'G')
+        {
+            pieceList['G'].push_back(make_pair(col[colPos], row));
+        }
+        else if (fen[i] == 'M')
+        {
+            pieceList['M'].push_back(make_pair(col[colPos], row));
+        }
+        else if (fen[i] == 'E')
+        {
+            pieceList['E'].push_back(make_pair(col[colPos], row));
+        }
+        else if (fen[i] == 'L')
+        {
+            pieceList['L'].push_back(make_pair(col[colPos], row));
+        }
+        else if (fen[i] == 'C')
+        {
+            pieceList['C'].push_back(make_pair(col[colPos], row));
+        }
+        else if (fen[i] == 'Z')
+        {
+            pieceList['Z'].push_back(make_pair(col[colPos], row));
+        }
+
+        if (num == false)
+        {
+            colPos++;
+        }
+        num = false;
+    }
+    return pieceList;
 }
 
 tuple<map<char, vector<pair<char, int>>>, vector<vector<BoardState>>> mapInit(map<char, vector<pair<char, int>>> pieceList, string fen, vector<vector<BoardState>> board)
@@ -1235,15 +1340,31 @@ vector<string> pawnMoves(vector<vector<BoardState>> board, map<char, vector<pair
 
 vector<string> allMoves(vector<vector<BoardState>> board, map<char, vector<pair<char, int>>> pieceList, char colourTurn)
 {
+
     vector<string> lMoves = lionMoves(board, pieceList, colourTurn);
     vector<string> zMoves = zebraMoves(board, pieceList, colourTurn);
     vector<string> eMoves = elephantMoves(board, pieceList, colourTurn);
     vector<string> pMoves = pawnMoves(board, pieceList, colourTurn);
+
+    // vector<string> lMoves = lionMoves(board, pieceList, 'w');
+    // vector<string> zMoves = zebraMoves(board, pieceList, 'w');
+    // vector<string> eMoves = elephantMoves(board, pieceList, 'w');
+    // vector<string> pMoves = pawnMoves(board, pieceList, 'w');
+
+    // vector<string> blMoves = lionMoves(board, pieceList, 'b');
+    // vector<string> bzMoves = zebraMoves(board, pieceList, 'b');
+    // vector<string> beMoves = elephantMoves(board, pieceList, 'b');
+    // vector<string> bpMoves = pawnMoves(board, pieceList, 'b');
+
     vector<string> totalMoves;
     totalMoves.insert(totalMoves.end(), lMoves.begin(), lMoves.end());
     totalMoves.insert(totalMoves.end(), zMoves.begin(), zMoves.end());
     totalMoves.insert(totalMoves.end(), eMoves.begin(), eMoves.end());
     totalMoves.insert(totalMoves.end(), pMoves.begin(), pMoves.end());
+    // totalMoves.insert(totalMoves.end(), blMoves.begin(), blMoves.end());
+    // totalMoves.insert(totalMoves.end(), bzMoves.begin(), bzMoves.end());
+    // totalMoves.insert(totalMoves.end(), beMoves.begin(), beMoves.end());
+    // totalMoves.insert(totalMoves.end(), bpMoves.begin(), bpMoves.end());
     // for (int i = 0; i < lMoves.size(); i++)
     // {
     //     cout << lMoves[i] << endl;
@@ -1255,7 +1376,7 @@ vector<string> allMoves(vector<vector<BoardState>> board, map<char, vector<pair<
     return totalMoves;
 }
 
-tuple<map<char, vector<pair<char, int>>>, vector<vector<BoardState>>, string, char> doMove(vector<vector<BoardState>> board, map<char, vector<pair<char, int>>> pieceList, string fen, char &colourTurn, int numTurn, string move)
+tuple<map<char, vector<pair<char, int>>>, vector<vector<BoardState>>, string> doMove(vector<vector<BoardState>> board, map<char, vector<pair<char, int>>> pieceList, string fen, char colourTurn, int numTurn, string move)
 {
     vector<char> column = {'a', 'b', 'c', 'd', 'e', 'f', 'g'};
     int fCol = 0;
@@ -1318,6 +1439,60 @@ tuple<map<char, vector<pair<char, int>>>, vector<vector<BoardState>>, string, ch
     board[toRows][toCols] = board[fromRows][fromCols];
     board[fromRows][fromCols] = empty;
 
+    // if (move == "c5c4")
+    // {
+    //     cout << "I WANNA KMS" << endl;
+    // }
+
+    // if (colourTurn == 'b')
+    // {
+    //     if (fromRows == 3 && toRows == 3)
+    //     {
+    //         board[toRows][toCols] = river;
+    //     }
+    //     for (int i = 0; i < board[3].size(); i++)
+    //     {
+    //         if (i != toCols)
+    //         {
+    //             if (board[3][i] >= 5 && board[3][i] <= 8)
+    //             {
+    //                 board[3][i] = river;
+    //             }
+    //         }
+    //         if (i == toCols && toRows != 3)
+    //         {
+    //             if (board[3][i] >= 5 && board[3][i] <= 8)
+    //             {
+    //                 board[3][i] = river;
+    //             }
+    //         }
+    //     }
+    // }
+    // else
+    // {
+    //     if (fromRows == 3 && toRows == 3)
+    //     {
+    //         board[toRows][toCols] = river;
+    //     }
+    //     for (int i = 0; i < board[3].size(); i++)
+    //     {
+    //         if (i != toCols)
+    //         {
+    //             if (board[3][i] >= 1 && board[3][i] <= 4)
+    //             {
+    //                 board[3][i] = river;
+    //             }
+    //         }
+    //         if (i == toCols && toRows != 3)
+    //         {
+    //             if (board[3][i] >= 1 && board[3][i] <= 4)
+    //             {
+    //                 board[3][i] = river;
+    //             }
+    //         }
+    //     }
+    // }
+
     for (int i = 0; i < board[3].size(); i++)
     {
         if (colourTurn == 'b')
@@ -1325,6 +1500,7 @@ tuple<map<char, vector<pair<char, int>>>, vector<vector<BoardState>>, string, ch
             if (board[3][i] >= 5 && board[3][i] <= 8 && riverPieces[i] == "B-here" || (fromRows == 3 && toRows == 3))
             {
                 board[3][i] = river;
+                break;
             }
         }
         else
@@ -1332,24 +1508,41 @@ tuple<map<char, vector<pair<char, int>>>, vector<vector<BoardState>>, string, ch
             if (board[3][i] >= 1 && board[3][i] <= 4 && riverPieces[i] == "W-here" || (fromRows == 3 && toRows == 3))
             {
                 board[3][i] = river;
+                break;
             }
         }
     }
 
-    if (colourTurn == 'b')
-    {
-        //numTurn++;
-        colourTurn = 'w';
-    }
-    else
-    {
-        colourTurn = 'b';
-    }
     fen = makeFen(board, colourTurn, numTurn);
-
-    tuple<map<char, vector<pair<char, int>>>, vector<vector<BoardState>>> upDatePieces = mapInit(pieceList, fen, board);
-    pieceList = get<0>(upDatePieces);
-    return make_tuple(pieceList, board, fen, colourTurn);
+    // cout << "------------- before ---------------" << endl;
+    // for (map<char, vector<pair<char, int>>>::iterator ii = pieceList.begin(); ii != pieceList.end(); ++ii)
+    // {
+    //     cout << (*ii).first << ": ";
+    //     vector<pair<char, int>> inVect = (*ii).second;
+    //     for (unsigned j = 0; j < inVect.size(); j++)
+    //     {
+    //         cout << inVect[j].first << inVect[j].second << " ";
+    //     }
+    //     cout << endl;
+    // }
+    // cout << "------------- before ---------------" << endl;
+    pieceList.clear();
+    pieceList = updateFen(pieceList, fen);
+    // cout << "------------- after ---------------" << endl;
+    // for (map<char, vector<pair<char, int>>>::iterator ii = pieceList.begin(); ii != pieceList.end(); ++ii)
+    // {
+    //     cout << (*ii).first << ": ";
+    //     vector<pair<char, int>> inVect = (*ii).second;
+    //     for (unsigned j = 0; j < inVect.size(); j++)
+    //     {
+    //         cout << inVect[j].first << inVect[j].second << " ";
+    //     }
+    //     cout << endl;
+    // }
+    // cout << "------------- after ---------------" << endl;
+    // cout << endl;
+    board = boardSetup(board);
+    return make_tuple(pieceList, board, fen);
 }
 
 bool gameState(vector<vector<BoardState>> board, map<char, vector<pair<char, int>>> pieceList, char colourTurn, string fen)
@@ -1398,6 +1591,19 @@ bool gameState(vector<vector<BoardState>> board, map<char, vector<pair<char, int
     //         }
     //     }
     // }
+    if (pieceList['p'].size() == 0 && pieceList['e'].size() == 0 && pieceList['z'].size() && pieceList['P'].size() == 0 && pieceList['E'].size() == 0 && pieceList['Z'].size())
+    {
+        if (pieceList['l'][0].first != pieceList['L'][0].first)
+        {
+            if (pieceList['l'][0].second != pieceList['L'][0].second - 2 && ((int)pieceList['l'][0].first - '0') != ((int)pieceList['L'][0].first - '0' + 2))
+            {
+                if (pieceList['l'][0].second != pieceList['L'][0].second + 2 && ((int)pieceList['l'][0].first - '0') != ((int)pieceList['L'][0].first - '0' + 2))
+                {
+                    return true;
+                }
+            }
+        }
+    }
 
     if (pieceList['l'].size() == 0)
     {
@@ -1414,87 +1620,40 @@ bool gameState(vector<vector<BoardState>> board, map<char, vector<pair<char, int
 int scoreCheck(map<char, vector<pair<char, int>>> pieceList, char colourTurn)
 {
     int score = 0;
-    bool game = false;
-    //white wins
-    if (colourTurn == 'b')
+
+    if (pieceList['l'].size() == 0)
     {
-        if (pieceList['l'].size() == 0)
-        {
-            return -10000;
-            // cout << score << endl;
-            // game = true;
-        }
-        //black wins
-        else if (pieceList['L'].size() == 0)
-        {
-            return 10000;
-            // cout << score << endl;
-            // game = true;
-        }
+        return 10000;
     }
-    else
+    //black wins
+    else if (pieceList['L'].size() == 0)
     {
-        if (pieceList['l'].size() == 0)
-        {
-            return 10000;
-            // cout << score << endl;
-            // game = true;
-        }
-        //black wins
-        else if (pieceList['L'].size() == 0)
-        {
-            return -10000;
-            // cout << score << endl;
-            // game = true;
-        }
+        return -10000;
     }
 
-    score += pieceList['p'].size() * 100;
-    score += pieceList['P'].size() * -100;
-    score += pieceList['e'].size() * 200;
-    score += pieceList['E'].size() * -200;
-    score += pieceList['z'].size() * 300;
-    score += pieceList['Z'].size() * -300;
+    score += pieceList['p'].size() * -100;
+    score += pieceList['e'].size() * -200;
+    score += pieceList['z'].size() * -300;
 
-    // if (!game)
-    // {
+    score += pieceList['P'].size() * 100;
+    score += pieceList['E'].size() * 200;
+    score += pieceList['Z'].size() * 300;
 
-    if (colourTurn == 'b')
+    if (colourTurn == 'w')
     {
+        //cout << "score checks value is: " << score << endl;
         return score;
     }
     else
     {
         score = -1 * score;
+        //cout << "score checks value is: " << score << endl;
         return score;
     }
-    //}
 }
 
-int miniMax(vector<vector<BoardState>> board, map<char, vector<pair<char, int>>> pieceList, string fen, char colourTurn, int numTurn, int depth)
+int miniMax(string fen, int depth)
 {
-
-    if (gameState(board, pieceList, colourTurn, fen) || depth <= 0)
-    {
-        return scoreCheck(pieceList, colourTurn);
-    }
-    int value = -1000000;
-    vector<string> moves = allMoves(board, pieceList, colourTurn);
-    for (string move : moves)
-    {
-        if (move == "d2d5")
-        {
-            cout << "asdasd" << endl;
-        }
-        // cout << colourTurn << endl;
-
-        tuple<map<char, vector<pair<char, int>>>, vector<vector<BoardState>>, string, char> nextState = doMove(board, pieceList, fen, colourTurn, numTurn, move);
-        //cout << "somethig here " << get<1>(nextState) << endl;
-        int eval = -miniMax(get<1>(nextState), get<0>(nextState), get<2>(nextState), get<3>(nextState), numTurn, (depth - 1));
-        value = max(value, eval);
-        //cout << value << endl;
-    }
-    return value;
 }
 
 int main()
@@ -1525,7 +1684,7 @@ int main()
         tuple<map<char, vector<pair<char, int>>>, vector<vector<BoardState>>> setUp = mapInit(pieceList, fen[i], board);
         pieceList = get<0>(setUp);
         board = get<1>(setUp);
-
+        startTurn = colourTurn[i];
         cout << miniMax(board, pieceList, fen[i], colourTurn[i], numTurn[i], 2) << endl;
         //cout << numTurn[i] << endl;
         //clears the vecs
