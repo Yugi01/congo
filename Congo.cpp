@@ -9,8 +9,6 @@
 
 using namespace std;
 
-char startTurn;
-
 // void pieceListOutput(map<char, vector<pair<char, int>>> pieceList)
 // {
 //     for (auto ii = pieceList.begin(); ii != pieceList.end(); ++ii)
@@ -53,7 +51,7 @@ vector<vector<BoardState>> boardSetup(vector<vector<BoardState>> board)
     {
         for (int j = 0; j < board[0].size(); j++)
         {
-            if (i == 3)
+            if (i == 3 && board[i][j] == NULL)
             {
                 board[i][j] = river;
             }
@@ -76,7 +74,7 @@ vector<vector<BoardState>> boardSetup(vector<vector<BoardState>> board)
     return board;
 }
 
-string makeFen(vector<vector<BoardState>> board, char colour, int turn)
+string makeFen(vector<vector<BoardState>> board)
 {
     int counter = 0;
     string out = "";
@@ -140,12 +138,154 @@ string makeFen(vector<vector<BoardState>> board, char colour, int turn)
             out += "/";
         }
     }
-    //out += " ";
-    //out += colour;
-    //out += " " + to_string(turn);
 
     return out;
-    //cout << out << endl;
+}
+
+// map<char, vector<pair<char, int>>> updatePieceList(map<char, vector<pair<char, int>>> pieceList, string fen)
+// {
+//     int row = 7;
+//     vector<char> col = {'a', 'b', 'c', 'd', 'e', 'f', 'g'};
+//     vector<char> spaces = {'1', '2', '3', '4', '5', '6', '7'};
+//     int colPos = 0;
+//     bool num = false;
+//     for (int i = 0; i < fen.length(); i++)
+//     {
+//         //should handle the numbers for spacing in the input
+//         for (int j = 0; j < spaces.size(); j++)
+//         {
+//             if (fen[i] == spaces[j])
+//             {
+//                 num = true;
+//                 colPos = colPos + (spaces[j] - '0');
+//                 break;
+//             }
+//         }
+//         if (fen[i] == '/')
+//         {
+//             row--;
+//             colPos = 0;
+//             continue;
+//         }
+//         //black pieces
+//         else if (fen[i] == 'p')
+//         {
+//             pieceList['p'].push_back(make_pair(col[colPos], row));
+//         }
+//         else if (fen[i] == 's')
+//         {
+//             pieceList['s'].push_back(make_pair(col[colPos], row));
+//         }
+//         else if (fen[i] == 'g')
+//         {
+//             pieceList['g'].push_back(make_pair(col[colPos], row));
+//         }
+//         else if (fen[i] == 'm')
+//         {
+//             pieceList['m'].push_back(make_pair(col[colPos], row));
+//         }
+//         else if (fen[i] == 'e')
+//         {
+//             pieceList['e'].push_back(make_pair(col[colPos], row));
+//         }
+//         else if (fen[i] == 'l')
+//         {
+//             pieceList['l'].push_back(make_pair(col[colPos], row));
+//         }
+//         else if (fen[i] == 'c')
+//         {
+//             pieceList['c'].push_back(make_pair(col[colPos], row));
+//         }
+//         else if (fen[i] == 'z')
+//         {
+//             pieceList['z'].push_back(make_pair(col[colPos], row));
+//         }
+//         //white pieces
+//         else if (fen[i] == 'P')
+//         {
+//             pieceList['P'].push_back(make_pair(col[colPos], row));
+//         }
+//         else if (fen[i] == 'S')
+//         {
+//             pieceList['S'].push_back(make_pair(col[colPos], row));
+//         }
+//         else if (fen[i] == 'G')
+//         {
+//             pieceList['G'].push_back(make_pair(col[colPos], row));
+//         }
+//         else if (fen[i] == 'M')
+//         {
+//             pieceList['M'].push_back(make_pair(col[colPos], row));
+//         }
+//         else if (fen[i] == 'E')
+//         {
+//             pieceList['E'].push_back(make_pair(col[colPos], row));
+//         }
+//         else if (fen[i] == 'L')
+//         {
+//             pieceList['L'].push_back(make_pair(col[colPos], row));
+//         }
+//         else if (fen[i] == 'C')
+//         {
+//             pieceList['C'].push_back(make_pair(col[colPos], row));
+//         }
+//         else if (fen[i] == 'Z')
+//         {
+//             pieceList['Z'].push_back(make_pair(col[colPos], row));
+//         }
+//         if (num == false)
+//         {
+//             colPos++;
+//         }
+//         num = false;
+//     }
+//     return pieceList;
+// }
+
+map<char, vector<pair<char, int>>> updatePieceList(map<char, vector<pair<char, int>>> pieceList, vector<vector<BoardState>> board)
+{
+
+    vector<char> col = {'a', 'b', 'c', 'd', 'e', 'f', 'g'};
+
+    for (int i = 0; i < board.size(); i++)
+    {
+        for (int j = 0; j < board[0].size(); j++)
+        {
+            if (board[i][j] == wLion)
+            {
+                pieceList['L'].push_back(make_pair(col[j], i + 1));
+            }
+            if (board[i][j] == bLion)
+            {
+                pieceList['l'].push_back(make_pair(col[j], i + 1));
+            }
+            if (board[i][j] == wZebra)
+            {
+                pieceList['Z'].push_back(make_pair(col[j], i + 1));
+            }
+            if (board[i][j] == bZebra)
+            {
+                pieceList['z'].push_back(make_pair(col[j], i + 1));
+            }
+            if (board[i][j] == wElephant)
+            {
+                pieceList['E'].push_back(make_pair(col[j], i + 1));
+            }
+            if (board[i][j] == bElephant)
+            {
+                pieceList['e'].push_back(make_pair(col[j], i + 1));
+            }
+            if (board[i][j] == wPawn)
+            {
+                pieceList['P'].push_back(make_pair(col[j], i + 1));
+            }
+            if (board[i][j] == bPawn)
+            {
+                pieceList['p'].push_back(make_pair(col[j], i + 1));
+            }
+        }
+    }
+    return pieceList;
 }
 
 // void updatePieces(int rows, int cols, vector<vector<BoardState>> board, map<char, vector<pair<char, int>>> &pieceList)
@@ -154,7 +294,6 @@ string makeFen(vector<vector<BoardState>> board, char colour, int turn)
 //     {
 //     }
 // }
-
 // vector<string> makeFenArray(string fen)
 // {
 //     vector<string> newFen(7);
@@ -343,109 +482,6 @@ void printZebra(map<char, vector<pair<char, int>>> pieceList)
         cout << pieceList['z'][i].first << pieceList['z'][i].second << " ";
     }
     cout << endl;
-}
-
-map<char, vector<pair<char, int>>> updateFen(map<char, vector<pair<char, int>>> pieceList, string fen)
-{
-    int row = 7;
-    vector<char> col = {'a', 'b', 'c', 'd', 'e', 'f', 'g'};
-    vector<char> spaces = {'1', '2', '3', '4', '5', '6', '7'};
-    int colPos = 0;
-    bool num = false;
-
-    for (int i = 0; i < fen.length(); i++)
-    {
-        //should handle the numbers for spacing in the input
-        for (int j = 0; j < spaces.size(); j++)
-        {
-            if (fen[i] == spaces[j])
-            {
-                num = true;
-                colPos = colPos + (spaces[j] - '0');
-                break;
-            }
-        }
-
-        if (fen[i] == '/')
-        {
-            row--;
-            colPos = 0;
-            continue;
-        }
-        //black pieces
-        else if (fen[i] == 'p')
-        {
-            pieceList['p'].push_back(make_pair(col[colPos], row));
-        }
-        else if (fen[i] == 's')
-        {
-            pieceList['s'].push_back(make_pair(col[colPos], row));
-        }
-        else if (fen[i] == 'g')
-        {
-            pieceList['g'].push_back(make_pair(col[colPos], row));
-        }
-        else if (fen[i] == 'm')
-        {
-            pieceList['m'].push_back(make_pair(col[colPos], row));
-        }
-        else if (fen[i] == 'e')
-        {
-            pieceList['e'].push_back(make_pair(col[colPos], row));
-        }
-        else if (fen[i] == 'l')
-        {
-            pieceList['l'].push_back(make_pair(col[colPos], row));
-        }
-        else if (fen[i] == 'c')
-        {
-            pieceList['c'].push_back(make_pair(col[colPos], row));
-        }
-        else if (fen[i] == 'z')
-        {
-            pieceList['z'].push_back(make_pair(col[colPos], row));
-        }
-        //white pieces
-        else if (fen[i] == 'P')
-        {
-            pieceList['P'].push_back(make_pair(col[colPos], row));
-        }
-        else if (fen[i] == 'S')
-        {
-            pieceList['S'].push_back(make_pair(col[colPos], row));
-        }
-        else if (fen[i] == 'G')
-        {
-            pieceList['G'].push_back(make_pair(col[colPos], row));
-        }
-        else if (fen[i] == 'M')
-        {
-            pieceList['M'].push_back(make_pair(col[colPos], row));
-        }
-        else if (fen[i] == 'E')
-        {
-            pieceList['E'].push_back(make_pair(col[colPos], row));
-        }
-        else if (fen[i] == 'L')
-        {
-            pieceList['L'].push_back(make_pair(col[colPos], row));
-        }
-        else if (fen[i] == 'C')
-        {
-            pieceList['C'].push_back(make_pair(col[colPos], row));
-        }
-        else if (fen[i] == 'Z')
-        {
-            pieceList['Z'].push_back(make_pair(col[colPos], row));
-        }
-
-        if (num == false)
-        {
-            colPos++;
-        }
-        num = false;
-    }
-    return pieceList;
 }
 
 tuple<map<char, vector<pair<char, int>>>, vector<vector<BoardState>>> mapInit(map<char, vector<pair<char, int>>> pieceList, string fen, vector<vector<BoardState>> board)
@@ -669,60 +705,61 @@ vector<string> lionMoves(vector<vector<BoardState>> board, map<char, vector<pair
         if (temp[0].first == 'c' && temp[0].second == 5 && enemyTemp[0].first == 'e' && enemyTemp[0].second == 3 && board[3][3] == 9)
         {
             //cout << "captures down right" << endl;
-            moves.push_back((make_pair(column[cols + 2], rows + 3)));
+            moves.push_back((make_pair(column[cols + 2], rows - 1)));
         }
 
         //capture diagonal down left
         if (temp[0].first == 'e' && temp[0].second == 5 && enemyTemp[0].first == 'c' && enemyTemp[0].second == 3 && board[3][3] == 9)
         {
             //cout << "capture down left" << endl;
-            moves.push_back((make_pair(column[cols + 2], rows + 3)));
+            moves.push_back((make_pair(column[cols - 2], rows - 1)));
         }
 
         //up
+
         if (rows != 6 && ((board[rows + 1][cols] >= 1 && board[rows + 1][cols] <= 4) || board[rows + 1][cols] == 55))
         {
             //cout << "up" << endl;
             moves.push_back((make_pair(column[cols], rows + 2)));
         }
         //down
-        if (!(rows <= 3) && (board[rows - 1][cols] >= 1 && board[rows - 1][cols] <= 4) || board[rows - 1][cols] == 55)
+        if (rows > 4 && (board[rows - 1][cols] >= 1 && board[rows - 1][cols] <= 4) || board[rows - 1][cols] == 55)
         {
             //cout << "down" << endl;
             moves.push_back((make_pair(column[cols], rows)));
         }
         //left
-        if (!(cols <= 2) && (board[rows][cols - 1] >= 1 && board[rows][cols - 1] <= 4) || board[rows][cols - 1] == 55)
+        if (cols > 2 && (board[rows][cols - 1] >= 1 && board[rows][cols - 1] <= 4) || board[rows][cols - 1] == 55)
         {
             //cout << "left" << endl;
             moves.push_back((make_pair(column[cols - 1], rows + 1)));
         }
         //right
-        if (!(cols >= 4) && ((board[rows][cols + 1] >= 1 && board[rows][cols + 1] <= 4) || board[rows][cols + 1] == 55))
+        if (cols < 4 && ((board[rows][cols + 1] >= 1 && board[rows][cols + 1] <= 4) || board[rows][cols + 1] == 55))
         {
             //cout << "right" << endl;
             moves.push_back((make_pair(column[cols + 1], rows + 1)));
         }
         //up-left
-        if (!(cols <= 2) && rows != 6 && ((board[rows + 1][cols - 1] >= 1 && board[rows + 1][cols - 1] <= 4) || board[rows + 1][cols - 1] == 55))
+        if ((rows != 6 && cols > 2) && ((board[rows + 1][cols - 1] >= 1 && board[rows + 1][cols - 1] <= 4) || board[rows + 1][cols - 1] == 55))
         {
             //cout << "up-left" << endl;
             moves.push_back((make_pair(column[cols - 1], rows + 2)));
         }
         //up-right
-        if (!(cols >= 4) && rows != 6 && ((board[rows + 1][cols + 1] >= 1 && board[rows + 1][cols + 1] <= 4) || board[rows + 1][cols + 1] == 55))
+        if ((rows != 6 && cols < 4) && ((board[rows + 1][cols + 1] >= 1 && board[rows + 1][cols + 1] <= 4) || board[rows + 1][cols + 1] == 55))
         {
             // cout << "up-right" << endl;
             moves.push_back((make_pair(column[cols + 1], rows + 2)));
         }
         //down-left
-        if (!(cols <= 2) && !(rows <= 3) && (board[rows - 1][cols - 1] >= 1 && board[rows - 1][cols - 1] <= 4) || board[rows - 1][cols - 1] == 55)
+        if (rows > 4 && cols > 2 && (board[rows - 1][cols - 1] >= 1 && board[rows - 1][cols - 1] <= 4) || board[rows - 1][cols - 1] == 55)
         {
             //cout << "down-left" << endl;
             moves.push_back((make_pair(column[cols - 1], rows)));
         }
         //down-right
-        if (!(cols >= 4) && !(rows <= 3) && ((board[rows - 1][cols + 1] >= 1 && board[rows - 1][cols + 1] <= 4) || board[rows - 1][cols + 1] == 55))
+        if (rows > 4 && cols < 4 && ((board[rows - 1][cols + 1] >= 1 && board[rows - 1][cols + 1] <= 4) || board[rows - 1][cols + 1] == 55))
         {
             //cout << "down-right" << endl;
             moves.push_back((make_pair(column[cols + 1], rows)));
@@ -799,37 +836,37 @@ vector<string> lionMoves(vector<vector<BoardState>> board, map<char, vector<pair
             moves.push_back((make_pair(column[cols], rows)));
         }
         //left
-        if (!(cols <= 2) && ((board[rows][cols - 1] >= 5 && board[rows][cols - 1] <= 8) || board[rows][cols - 1] == 11))
+        if (cols > 2 && ((board[rows][cols - 1] >= 5 && board[rows][cols - 1] <= 8) || board[rows][cols - 1] == 11))
         {
             //   cout << "left" << endl;
             moves.push_back((make_pair(column[cols - 1], rows + 1)));
         }
         //right
-        if (!(cols >= 4) && ((board[rows][cols + 1] >= 5 && board[rows][cols + 1] <= 8) || board[rows][cols + 1] == 11))
+        if (cols < 4 && ((board[rows][cols + 1] >= 5 && board[rows][cols + 1] <= 8) || board[rows][cols + 1] == 11))
         {
             //   cout << "right" << endl;
             moves.push_back((make_pair(column[cols + 1], rows + 1)));
         }
         //up-left
-        if (!(cols <= 2) && rows != 2 && ((board[rows + 1][cols - 1] >= 5 && board[rows + 1][cols - 1] <= 8) || board[rows + 1][cols - 1] == 11))
+        if (rows != 2 && cols > 2 && ((board[rows + 1][cols - 1] >= 5 && board[rows + 1][cols - 1] <= 8) || board[rows + 1][cols - 1] == 11))
         {
             //    cout << "up-left" << endl;
             moves.push_back((make_pair(column[cols - 1], rows + 2)));
         }
         //up-right
-        if (!(cols >= 4) && rows != 2 && ((board[rows + 1][cols + 1] >= 5 && board[rows + 1][cols + 1] <= 8) || board[rows + 1][cols + 1] == 11))
+        if (rows != 2 && cols < 4 && ((board[rows + 1][cols + 1] >= 5 && board[rows + 1][cols + 1] <= 8) || board[rows + 1][cols + 1] == 11))
         {
             //    cout << "up-right" << endl;
             moves.push_back((make_pair(column[cols + 1], rows + 2)));
         }
         //down-left
-        if (!(cols <= 2) && (rows != 0) && ((board[rows - 1][cols - 1] >= 5 && board[rows - 1][cols - 1] <= 8) || board[rows - 1][cols - 1] == 11))
+        if (rows != 0 && cols > 2 && ((board[rows - 1][cols - 1] >= 5 && board[rows - 1][cols - 1] <= 8) || board[rows - 1][cols - 1] == 11))
         {
             //    cout << "down-left" << endl;
             moves.push_back((make_pair(column[cols - 1], rows)));
         }
         //down-right
-        if (!(cols >= 4) && (rows != 0) && ((board[rows - 1][cols + 1] >= 5 && board[rows - 1][cols + 1] <= 8) || board[rows - 1][cols + 1] == 11))
+        if (rows != 0 && cols < 4 && ((board[rows - 1][cols + 1] >= 5 && board[rows - 1][cols + 1] <= 8) || board[rows - 1][cols + 1] == 11))
         {
             //    cout << "down-right" << endl;
             moves.push_back((make_pair(column[cols + 1], rows)));
@@ -905,6 +942,7 @@ vector<string> zebraMoves(vector<vector<BoardState>> board, map<char, vector<pai
 
     if (colourTurn == 'b')
     {
+        //left
         if (cols >= 2)
         {
             //left-2 and up-1
@@ -1272,12 +1310,12 @@ vector<string> pawnMoves(vector<vector<BoardState>> board, map<char, vector<pair
                     moves[i].push_back((make_pair(column[cols + 1], rows)));
                 }
                 //past river up-1
-                if (rows <= 2 && (board[rows + 1][cols] <= 0 || board[rows + 1][cols] >= 9))
+                if (rows <= 2 && (board[rows + 1][cols] == 0 || board[rows + 1][cols] >= 9))
                 {
                     moves[i].push_back((make_pair(column[cols], rows + 2)));
                 }
                 //past river up-2
-                if (rows <= 2 && (board[rows + 2][cols] <= 0 || board[rows + 2][cols] >= 9) && (board[rows + 1][cols] <= 0 || board[rows + 1][cols] >= 9))
+                if (rows <= 2 && (board[rows + 2][cols] == 0 || board[rows + 2][cols] >= 9) && (board[rows + 1][cols] == 0 || board[rows + 1][cols] >= 9))
                 {
                     moves[i].push_back((make_pair(column[cols], rows + 3)));
                 }
@@ -1300,12 +1338,12 @@ vector<string> pawnMoves(vector<vector<BoardState>> board, map<char, vector<pair
                     moves[i].push_back((make_pair(column[cols + 1], rows + 2)));
                 }
                 //past river down-1
-                if (rows >= 4 && (board[rows - 1][cols] <= 0 || board[rows - 1][cols] >= 9))
+                if (rows >= 4 && (board[rows - 1][cols] == 0 || board[rows - 1][cols] >= 9))
                 {
                     moves[i].push_back((make_pair(column[cols], rows)));
                 }
                 //past river down-2
-                if (rows >= 4 && (board[rows - 2][cols] <= 0 || board[rows - 2][cols] >= 9) && (board[rows - 1][cols] <= 0 || board[rows - 1][cols] >= 9))
+                if (rows >= 4 && (board[rows - 2][cols] == 0 || board[rows - 2][cols] >= 9) && (board[rows - 1][cols] == 0 || board[rows - 1][cols] >= 9))
                 {
                     moves[i].push_back((make_pair(column[cols], rows - 1)));
                 }
@@ -1345,43 +1383,23 @@ vector<string> allMoves(vector<vector<BoardState>> board, map<char, vector<pair<
     vector<string> zMoves = zebraMoves(board, pieceList, colourTurn);
     vector<string> eMoves = elephantMoves(board, pieceList, colourTurn);
     vector<string> pMoves = pawnMoves(board, pieceList, colourTurn);
-
-    // vector<string> lMoves = lionMoves(board, pieceList, 'w');
-    // vector<string> zMoves = zebraMoves(board, pieceList, 'w');
-    // vector<string> eMoves = elephantMoves(board, pieceList, 'w');
-    // vector<string> pMoves = pawnMoves(board, pieceList, 'w');
-
-    // vector<string> blMoves = lionMoves(board, pieceList, 'b');
-    // vector<string> bzMoves = zebraMoves(board, pieceList, 'b');
-    // vector<string> beMoves = elephantMoves(board, pieceList, 'b');
-    // vector<string> bpMoves = pawnMoves(board, pieceList, 'b');
-
     vector<string> totalMoves;
+
     totalMoves.insert(totalMoves.end(), lMoves.begin(), lMoves.end());
     totalMoves.insert(totalMoves.end(), zMoves.begin(), zMoves.end());
     totalMoves.insert(totalMoves.end(), eMoves.begin(), eMoves.end());
     totalMoves.insert(totalMoves.end(), pMoves.begin(), pMoves.end());
-    // totalMoves.insert(totalMoves.end(), blMoves.begin(), blMoves.end());
-    // totalMoves.insert(totalMoves.end(), bzMoves.begin(), bzMoves.end());
-    // totalMoves.insert(totalMoves.end(), beMoves.begin(), beMoves.end());
-    // totalMoves.insert(totalMoves.end(), bpMoves.begin(), bpMoves.end());
-    // for (int i = 0; i < lMoves.size(); i++)
-    // {
-    //     cout << lMoves[i] << endl;
-    // }
-    // for (int i = 0; i < totalMoves.size(); i++)
-    // {
-    //     cout << totalMoves[i] << endl;
-    // }
+
     return totalMoves;
 }
 
-tuple<map<char, vector<pair<char, int>>>, vector<vector<BoardState>>, string> doMove(vector<vector<BoardState>> board, map<char, vector<pair<char, int>>> pieceList, string fen, char colourTurn, int numTurn, string move)
+tuple<vector<vector<BoardState>>, map<char, vector<pair<char, int>>>, string> doMove(vector<vector<BoardState>> board, map<char, vector<pair<char, int>>> pieceList, string fen, char colourTurn, string move)
 {
     vector<char> column = {'a', 'b', 'c', 'd', 'e', 'f', 'g'};
     int fCol = 0;
     int tCol = 0;
-    vector<string> riverPieces = {"-1", "-1", "-1", "-1", "-1", "-1", "-1"};
+    //vector<string> riverPieces = {"-1", "-1", "-1", "-1", "-1", "-1", "-1"};
+    bool riverPieces = false;
     //find the index for the col
     for (int j = 0; j < column.size(); j++)
     {
@@ -1402,150 +1420,139 @@ tuple<map<char, vector<pair<char, int>>>, vector<vector<BoardState>>, string> do
         tCol++;
     }
 
+    // if (move == "g4e4")
+    // {
+    //     cout << "Asdasd" << endl;
+    // }
+
     for (int i = 0; i < board[3].size(); i++)
     {
         if (colourTurn == 'b')
         {
             if ((board[3][i] >= 5 && board[3][i] <= 8))
             {
-                riverPieces[i] = "B-here";
+                //riverPieces[i] = "B-here";
+                riverPieces = true;
             }
         }
         else
         {
             if (board[3][i] >= 1 && board[3][i] <= 4)
             {
-                riverPieces[i] = "W-here";
+                //riverPieces[i] = "W-here";
+                riverPieces = true;
             }
         }
     }
 
-    // need to decrement both down by 1 to match the arrays starting at 0 rather than 1.
-    //works
-
     int fromCols = fCol - 1;
     int fromRows = ((int)move[1] - 48) - 1;
-    //cout << fromRows << " " << fromCols << endl;
 
     int toCols = tCol - 1;
     int toRows = ((int)move[3] - 48) - 1;
-    //cout << toRows << " " << toCols << endl;
-
-    // if (toRows == 1 && toCols == 3)
-    // {
-    //     cout << "whydo cave" << endl;
-    // }
 
     board[toRows][toCols] = board[fromRows][fromCols];
     board[fromRows][fromCols] = empty;
 
-    // if (move == "c5c4")
-    // {
-    //     cout << "I WANNA KMS" << endl;
-    // }
-
-    // if (colourTurn == 'b')
-    // {
-    //     if (fromRows == 3 && toRows == 3)
-    //     {
-    //         board[toRows][toCols] = river;
-    //     }
-    //     for (int i = 0; i < board[3].size(); i++)
-    //     {
-    //         if (i != toCols)
-    //         {
-    //             if (board[3][i] >= 5 && board[3][i] <= 8)
-    //             {
-    //                 board[3][i] = river;
-    //             }
-    //         }
-    //         if (i == toCols && toRows != 3)
-    //         {
-    //             if (board[3][i] >= 5 && board[3][i] <= 8)
-    //             {
-    //                 board[3][i] = river;
-    //             }
-    //         }
-    //     }
-    // }
-    // else
-    // {
-    //     if (fromRows == 3 && toRows == 3)
-    //     {
-    //         board[toRows][toCols] = river;
-    //     }
-    //     for (int i = 0; i < board[3].size(); i++)
-    //     {
-    //         if (i != toCols)
-    //         {
-    //             if (board[3][i] >= 1 && board[3][i] <= 4)
-    //             {
-    //                 board[3][i] = river;
-    //             }
-    //         }
-    //         if (i == toCols && toRows != 3)
-    //         {
-    //             if (board[3][i] >= 1 && board[3][i] <= 4)
-    //             {
-    //                 board[3][i] = river;
-    //             }
-    //         }
-    //     }
-    // }
-
-    for (int i = 0; i < board[3].size(); i++)
+    if (colourTurn == 'b')
     {
-        if (colourTurn == 'b')
+        if (fromRows == 3 && toRows == 3)
         {
-            if (board[3][i] >= 5 && board[3][i] <= 8 && riverPieces[i] == "B-here" || (fromRows == 3 && toRows == 3))
+            board[toRows][toCols] = river;
+        }
+        for (int i = 0; i < board[3].size(); i++)
+        {
+            if (i != toCols)
             {
-                board[3][i] = river;
-                break;
+                if (board[3][i] >= 5 && board[3][i] <= 8)
+                {
+                    board[3][i] = river;
+                }
+            }
+            if (i == toCols && toRows != 3)
+            {
+                if (board[3][i] >= 5 && board[3][i] <= 8)
+                {
+                    board[3][i] = river;
+                }
             }
         }
-        else
+    }
+    else
+    {
+        if (fromRows == 3 && toRows == 3)
         {
-            if (board[3][i] >= 1 && board[3][i] <= 4 && riverPieces[i] == "W-here" || (fromRows == 3 && toRows == 3))
+            board[toRows][toCols] = river;
+        }
+        for (int i = 0; i < board[3].size(); i++)
+        {
+            if (i != toCols)
             {
-                board[3][i] = river;
-                break;
+                if (board[3][i] >= 1 && board[3][i] <= 4)
+                {
+                    board[3][i] = river;
+                }
+            }
+            if (i == toCols && toRows != 3)
+            {
+                if (board[3][i] >= 1 && board[3][i] <= 4)
+                {
+                    board[3][i] = river;
+                }
             }
         }
     }
 
-    fen = makeFen(board, colourTurn, numTurn);
-    // cout << "------------- before ---------------" << endl;
-    // for (map<char, vector<pair<char, int>>>::iterator ii = pieceList.begin(); ii != pieceList.end(); ++ii)
+    // for (int i = 0; i < board[3].size(); i++)
     // {
-    //     cout << (*ii).first << ": ";
-    //     vector<pair<char, int>> inVect = (*ii).second;
-    //     for (unsigned j = 0; j < inVect.size(); j++)
+    //     if (colourTurn == 'b')
     //     {
-    //         cout << inVect[j].first << inVect[j].second << " ";
+    //         if (board[3][i] >= 5 && board[3][i] <= 8 && riverPieces)
+    //         {
+    //             if (board[3][i] >= 5 && board[3][i] <= 8)
+    //             {
+    //                 if (fromRows == 3)
+    //                 {
+    //                     board[3][i] = river;
+    //                     break;
+    //                 }
+    //                 else
+    //                 {
+    //                     continue;
+    //                 }
+    //             }
+    //         }
     //     }
-    //     cout << endl;
-    // }
-    // cout << "------------- before ---------------" << endl;
-    pieceList.clear();
-    pieceList = updateFen(pieceList, fen);
-    // cout << "------------- after ---------------" << endl;
-    // for (map<char, vector<pair<char, int>>>::iterator ii = pieceList.begin(); ii != pieceList.end(); ++ii)
-    // {
-    //     cout << (*ii).first << ": ";
-    //     vector<pair<char, int>> inVect = (*ii).second;
-    //     for (unsigned j = 0; j < inVect.size(); j++)
+    //     else
     //     {
-    //         cout << inVect[j].first << inVect[j].second << " ";
+    //         if (board[3][i] >= 1 && board[3][i] <= 4 && riverPieces)
+    //         {
+    //             if (board[3][i] >= 1 && board[3][i] <= 4)
+    //             {
+    //                 if (fromRows == 3)
+    //                 {
+    //                     board[3][i] = river;
+    //                     break;
+    //                 }
+    //                 else
+    //                 {
+
+    //                     continue;
+    //                 }
+    //             }
+    //         }
     //     }
-    //     cout << endl;
     // }
-    // cout << "------------- after ---------------" << endl;
-    // cout << endl;
+
     board = boardSetup(board);
-    return make_tuple(pieceList, board, fen);
+    string newFen = makeFen(board);
+    pieceList.clear();
+    pieceList = updatePieceList(pieceList, board);
+
+    return make_tuple(board, pieceList, newFen);
 }
 
-bool gameState(vector<vector<BoardState>> board, map<char, vector<pair<char, int>>> pieceList, char colourTurn, string fen)
+bool gameState(vector<vector<BoardState>> board, map<char, vector<pair<char, int>>> pieceList)
 {
     // if (colourTurn == 'b')
     // {
@@ -1591,19 +1598,19 @@ bool gameState(vector<vector<BoardState>> board, map<char, vector<pair<char, int
     //         }
     //     }
     // }
-    if (pieceList['p'].size() == 0 && pieceList['e'].size() == 0 && pieceList['z'].size() && pieceList['P'].size() == 0 && pieceList['E'].size() == 0 && pieceList['Z'].size())
-    {
-        if (pieceList['l'][0].first != pieceList['L'][0].first)
-        {
-            if (pieceList['l'][0].second != pieceList['L'][0].second - 2 && ((int)pieceList['l'][0].first - '0') != ((int)pieceList['L'][0].first - '0' + 2))
-            {
-                if (pieceList['l'][0].second != pieceList['L'][0].second + 2 && ((int)pieceList['l'][0].first - '0') != ((int)pieceList['L'][0].first - '0' + 2))
-                {
-                    return true;
-                }
-            }
-        }
-    }
+    // if (pieceList['p'].size() == 0 && pieceList['e'].size() == 0 && pieceList['z'].size() && pieceList['P'].size() == 0 && pieceList['E'].size() == 0 && pieceList['Z'].size())
+    // {
+    //     if (pieceList['l'][0].first != pieceList['L'][0].first)
+    //     {
+    //         if (pieceList['l'][0].second != pieceList['L'][0].second - 2 && ((int)pieceList['l'][0].first - '0') != ((int)pieceList['L'][0].first - '0' + 2))
+    //         {
+    //             if (pieceList['l'][0].second != pieceList['L'][0].second + 2 && ((int)pieceList['l'][0].first - '0') != ((int)pieceList['L'][0].first - '0' + 2))
+    //             {
+    //                 return true;
+    //             }
+    //         }
+    //     }
+    // }
 
     if (pieceList['l'].size() == 0)
     {
@@ -1652,8 +1659,50 @@ int scoreCheck(map<char, vector<pair<char, int>>> pieceList, char colourTurn)
     }
 }
 
-int miniMax(string fen, int depth)
+string isGameOver(map<char, vector<pair<char, int>>> pieceList)
 {
+
+    if (pieceList['l'].size() == 0)
+    {
+        return "White wins";
+    }
+    else if (pieceList['L'].size() == 0)
+    {
+        return "Black wins";
+    }
+    else
+    {
+        return "Continue";
+    }
+}
+
+int miniMax(vector<vector<BoardState>> board, map<char, vector<pair<char, int>>> pieceList, string fen, char colourTurn, int depth)
+{
+    //cout << colourTurn << " : " << depth << endl;
+    if (gameState(board, pieceList) || depth <= 0)
+    {
+        return scoreCheck(pieceList, colourTurn);
+    }
+
+    char colour = colourTurn == 'w' ? 'b' : 'w';
+
+    int value = -100000;
+    vector<string> moves = allMoves(board, pieceList, colourTurn);
+    for (string move : moves)
+    {
+        tuple<vector<vector<BoardState>>, map<char, vector<pair<char, int>>>, string> nextState = doMove(board, pieceList, fen, colourTurn, move);
+        //cout << move << " " << get<2>(nextState) << "with an evaluation of: " << scoreCheck(get<1>(nextState), colourTurn) << endl; //" " << colourTurn << "  " << depth <<
+        int eval = -miniMax(get<0>(nextState), get<1>(nextState), get<2>(nextState), colour, depth - 1);
+        //cout << eval << " " << value << "the max value is: ";
+        value = max(value, eval);
+        //cout << value << endl;
+        // if (value == -1000000)
+        // {
+        //     cout << "huh" << endl;
+        // }
+    }
+    //cout << endl;
+    return value;
 }
 
 int main()
@@ -1684,8 +1733,14 @@ int main()
         tuple<map<char, vector<pair<char, int>>>, vector<vector<BoardState>>> setUp = mapInit(pieceList, fen[i], board);
         pieceList = get<0>(setUp);
         board = get<1>(setUp);
-        startTurn = colourTurn[i];
-        cout << miniMax(board, pieceList, fen[i], colourTurn[i], numTurn[i], 2) << endl;
+
+        cout << miniMax(board, pieceList, fen[i], colourTurn[i], 2) << endl;
+        // vector<string> lMoves = pawnMoves(board, pieceList, colourTurn[i]);
+        // for (int i = 0; i < lMoves.size(); i++)
+        // {
+        //     cout << lMoves[i] << " ";
+        // }
+        // cout << endl;
         //cout << numTurn[i] << endl;
         //clears the vecs
         pieceList.clear();
