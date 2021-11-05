@@ -1549,6 +1549,9 @@ tuple<vector<vector<BoardState>>, map<char, vector<pair<char, int>>>, string> do
     pieceList.clear();
     pieceList = updatePieceList(pieceList, board);
 
+    //cout << "board in do move after the move has taken place:" << endl;
+    //printBoard(board);
+    //cout << endl;
     return make_tuple(board, pieceList, newFen);
 }
 
@@ -1628,14 +1631,15 @@ int scoreCheck(map<char, vector<pair<char, int>>> pieceList, char colourTurn)
 {
     int score = 0;
 
+    int side = colourTurn == 'w' ? 1 : -1;
     if (pieceList['l'].size() == 0)
     {
-        return 10000;
+        return 10000 * side;
     }
     //black wins
     else if (pieceList['L'].size() == 0)
     {
-        return -10000;
+        return -10000 * side;
     }
 
     score += pieceList['p'].size() * -100;
@@ -1690,16 +1694,17 @@ int miniMax(vector<vector<BoardState>> board, map<char, vector<pair<char, int>>>
     vector<string> moves = allMoves(board, pieceList, colourTurn);
     for (string move : moves)
     {
+        // cout << "------before------" << endl;
+        // printBoard(board);
+        // cout << "------before------" << endl;
         tuple<vector<vector<BoardState>>, map<char, vector<pair<char, int>>>, string> nextState = doMove(board, pieceList, fen, colourTurn, move);
-        //cout << move << " " << get<2>(nextState) << "with an evaluation of: " << scoreCheck(get<1>(nextState), colourTurn) << endl; //" " << colourTurn << "  " << depth <<
+        // cout << "------after------" << endl;
+        // printBoard(get<0>(nextState));
+        // cout << "------after------" << endl;
+        //cout << move << " " << get<2>(nextState) << " with an evaluation of: " << scoreCheck(get<1>(nextState), colourTurn) << endl; //" " << colourTurn << "  " << depth <<
         int eval = -miniMax(get<0>(nextState), get<1>(nextState), get<2>(nextState), colour, depth - 1);
         //cout << eval << " " << value << "the max value is: ";
         value = max(value, eval);
-        //cout << value << endl;
-        // if (value == -1000000)
-        // {
-        //     cout << "huh" << endl;
-        // }
     }
     //cout << endl;
     return value;
@@ -1735,7 +1740,7 @@ int main()
         board = get<1>(setUp);
 
         cout << miniMax(board, pieceList, fen[i], colourTurn[i], 2) << endl;
-        // vector<string> lMoves = pawnMoves(board, pieceList, colourTurn[i]);
+        // vector<string> lMoves = lionMoves(board, pieceList, colourTurn[i]);
         // for (int i = 0; i < lMoves.size(); i++)
         // {
         //     cout << lMoves[i] << " ";
