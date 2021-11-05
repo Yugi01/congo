@@ -1601,19 +1601,6 @@ bool gameState(vector<vector<BoardState>> board, map<char, vector<pair<char, int
     //         }
     //     }
     // }
-    // if (pieceList['p'].size() == 0 && pieceList['e'].size() == 0 && pieceList['z'].size() && pieceList['P'].size() == 0 && pieceList['E'].size() == 0 && pieceList['Z'].size())
-    // {
-    //     if (pieceList['l'][0].first != pieceList['L'][0].first)
-    //     {
-    //         if (pieceList['l'][0].second != pieceList['L'][0].second - 2 && ((int)pieceList['l'][0].first - '0') != ((int)pieceList['L'][0].first - '0' + 2))
-    //         {
-    //             if (pieceList['l'][0].second != pieceList['L'][0].second + 2 && ((int)pieceList['l'][0].first - '0') != ((int)pieceList['L'][0].first - '0' + 2))
-    //             {
-    //                 return true;
-    //             }
-    //         }
-    //     }
-    // }
 
     if (pieceList['l'].size() == 0)
     {
@@ -1680,6 +1667,118 @@ string isGameOver(map<char, vector<pair<char, int>>> pieceList)
     }
 }
 
+int numMoves(vector<vector<BoardState>> board, map<char, vector<pair<char, int>>> pieceList, char colourTurn)
+{
+    vector<string> totalMoves = allMoves(board, pieceList, colourTurn);
+    return totalMoves.size();
+}
+
+int attackScore(vector<vector<BoardState>> board, map<char, vector<pair<char, int>>> pieceList, char colourTurn)
+{
+    int attackScore = 0;
+    vector<string> totalMoves = allMoves(board, pieceList, colourTurn);
+    for (string move : totalMoves)
+    {
+        vector<char> column = {'a', 'b', 'c', 'd', 'e', 'f', 'g'};
+        int fCol = 0;
+        int tCol = 0;
+
+        for (int j = 0; j < column.size(); j++)
+        {
+            if (move[2] == column[j])
+            {
+                tCol++;
+                break;
+            }
+            tCol++;
+        }
+
+        int toCols = tCol - 1;
+        int toRows = ((int)move[3] - 48) - 1;
+        if (board[toRows][toCols] == 1 || board[toRows][toCols] == 5)
+        {
+            attackScore = attackScore + 10;
+        }
+        if ((board[toRows][toCols] >= 1 && board[toRows][toCols] <= 5) || (board[toRows][toCols] >= 6 && board[toRows][toCols] <= 8))
+        {
+            attackScore++;
+        }
+    }
+
+    return attackScore;
+}
+
+int checkLionCapture(vector<vector<BoardState>> board, map<char, vector<pair<char, int>>> pieceList, char colourTurn)
+{
+    vector<string> totalMoves = allMoves(board, pieceList, colourTurn);
+    for (string move : totalMoves)
+    {
+        vector<char> column = {'a', 'b', 'c', 'd', 'e', 'f', 'g'};
+        int fCol = 0;
+        int tCol = 0;
+
+        for (int j = 0; j < column.size(); j++)
+        {
+            if (move[2] == column[j])
+            {
+                tCol++;
+                break;
+            }
+            tCol++;
+        }
+
+        int toCols = tCol - 1;
+        int toRows = ((int)move[3] - 48) - 1;
+        if (board[toRows][toCols] == 1 || board[toRows][toCols] == 5)
+        {
+            return 10000;
+        }
+    }
+}
+
+int rawScore(vector<vector<BoardState>> board, map<char, vector<pair<char, int>>> pieceList, char colourTurn)
+{
+
+    // if (checkLionCapture(board, pieceList, colourTurn) == abs(10000))
+    // {
+    //     return checkLionCapture(board, pieceList, colourTurn);
+    // }
+    int deltaScore = scoreCheck(pieceList, colourTurn);
+    if (abs(deltaScore) == 10000)
+    {
+        return deltaScore;
+    }
+    if (pieceList['l'].size() == 1 && pieceList['L'].size() == 1 && pieceList['p'].size() == 0 && pieceList['e'].size() == 0 && pieceList['z'].size() == 0 && pieceList['P'].size() == 0 && pieceList['E'].size() == 0 && pieceList['Z'].size() == 0)
+    {
+        return 0;
+    }
+    char enemyColour = colourTurn == 'w' ? 'b' : 'w';
+    // int side = colourTurn == 'w' ? 1 : -1;
+    int myMoves = numMoves(board, pieceList, colourTurn);
+    int enemyMoves = numMoves(board, pieceList, enemyColour);
+
+    // cout << "My No. Moves: " << myMoves << endl;
+    // cout << "My enemy No. Moves: " << enemyMoves << endl;
+    // cout << endl;
+    int myAttackScore = attackScore(board, pieceList, colourTurn);
+    int enemyAttackScore = attackScore(board, pieceList, enemyColour);
+
+    // cout << "My AttScore Moves: " << myAttackScore << endl;
+    // cout << "My enemy AttScore Moves: " << enemyAttackScore << endl;
+    // cout << endl;
+    int deltaAttackScore = myAttackScore - enemyAttackScore;
+
+    int deltaMove = myMoves - enemyMoves;
+
+    // cout << endl;
+    // cout << "deltaAttackScore: " << deltaAttackScore << endl;
+    // cout << "deltaScore: " << deltaScore << endl;
+    // cout << "deltaMove: " << deltaMove << endl;
+
+    return deltaAttackScore + deltaScore + deltaMove;
+}
+//fix winning conditions above...
+
 int miniMax(vector<vector<BoardState>> board, map<char, vector<pair<char, int>>> pieceList, string fen, char colourTurn, int depth)
 {
     //cout << colourTurn << " : " << depth << endl;
@@ -1708,6 +1807,35 @@ int miniMax(vector<vector<BoardState>> board, map<char, vector<pair<char, int>>>
     }
     //cout << endl;
     return value;
+}
+
+int alphaBeta(vector<vector<BoardState>> board, map<char, vector<pair<char, int>>> pieceList, string fen, char colourTurn, int depth, int alpha, int beta)
+{
+    if (gameState(board, pieceList) || depth <= 0)
+    {
+        return rawScore(board, pieceList, colourTurn);
+    }
+    char colour = colourTurn == 'w' ? 'b' : 'w';
+    vector<string> moves = allMoves(board, pieceList, colourTurn);
+    for (string move : moves)
+    {
+        tuple<vector<vector<BoardState>>, map<char, vector<pair<char, int>>>, string> nextState = doMove(board, pieceList, fen, colourTurn, move);
+        int eval = -alphaBeta(get<0>(nextState), get<1>(nextState), get<2>(nextState), colour, depth - 1, -beta, -alpha);
+        if (depth == 4)
+        {
+            cout << eval << endl;
+        }
+
+        if (eval >= beta)
+        {
+            return beta;
+        }
+        if (eval > alpha)
+        {
+            alpha = eval;
+        }
+    }
+    return alpha;
 }
 
 int main()
@@ -1739,7 +1867,7 @@ int main()
         pieceList = get<0>(setUp);
         board = get<1>(setUp);
 
-        cout << miniMax(board, pieceList, fen[i], colourTurn[i], 2) << endl;
+        //cout << miniMax(board, pieceList, fen[i], colourTurn[i], 2) << endl;
         // vector<string> lMoves = lionMoves(board, pieceList, colourTurn[i]);
         // for (int i = 0; i < lMoves.size(); i++)
         // {
@@ -1747,6 +1875,11 @@ int main()
         // }
         // cout << endl;
         //cout << numTurn[i] << endl;
+
+        //cout << rawScore(board, pieceList, colourTurn[i]) << endl;
+
+        cout << alphaBeta(board, pieceList, fen[i], colourTurn[i], 4, -1000000, 1000000) << endl;
+
         //clears the vecs
         pieceList.clear();
         for (auto &elem : board)
