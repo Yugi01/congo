@@ -12,21 +12,6 @@ string ABbestMove = "";
 string playMoveAB = "";
 string miniBestMove = "";
 string playMoveMini = "";
-//vector<vector<BoardState>> 1v1Board;
-
-// void pieceListOutput(map<char, vector<pair<char, int>>> pieceList)
-// {
-//     for (auto ii = pieceList.begin(); ii != pieceList.end(); ++ii)
-//     {
-//         cout << (*ii).first << ": ";
-//         vector<string> inVect = (*ii).second;
-//         for (unsigned j = 0; j < inVect.size(); j++)
-//         {
-//             cout << inVect[j] << " ";
-//         }
-//         cout << endl;
-//     }
-// }
 
 //may ignore crocodiles, monkeys and giraffes and superpawns going forward.
 
@@ -147,105 +132,6 @@ string makeFen(vector<vector<BoardState>> board)
     return out;
 }
 
-// map<char, vector<pair<char, int>>> updatePieceList(map<char, vector<pair<char, int>>> pieceList, string fen)
-// {
-//     int row = 7;
-//     vector<char> col = {'a', 'b', 'c', 'd', 'e', 'f', 'g'};
-//     vector<char> spaces = {'1', '2', '3', '4', '5', '6', '7'};
-//     int colPos = 0;
-//     bool num = false;
-//     for (int i = 0; i < fen.length(); i++)
-//     {
-//         //should handle the numbers for spacing in the input
-//         for (int j = 0; j < spaces.size(); j++)
-//         {
-//             if (fen[i] == spaces[j])
-//             {
-//                 num = true;
-//                 colPos = colPos + (spaces[j] - '0');
-//                 break;
-//             }
-//         }
-//         if (fen[i] == '/')
-//         {
-//             row--;
-//             colPos = 0;
-//             continue;
-//         }
-//         //black pieces
-//         else if (fen[i] == 'p')
-//         {
-//             pieceList['p'].push_back(make_pair(col[colPos], row));
-//         }
-//         else if (fen[i] == 's')
-//         {
-//             pieceList['s'].push_back(make_pair(col[colPos], row));
-//         }
-//         else if (fen[i] == 'g')
-//         {
-//             pieceList['g'].push_back(make_pair(col[colPos], row));
-//         }
-//         else if (fen[i] == 'm')
-//         {
-//             pieceList['m'].push_back(make_pair(col[colPos], row));
-//         }
-//         else if (fen[i] == 'e')
-//         {
-//             pieceList['e'].push_back(make_pair(col[colPos], row));
-//         }
-//         else if (fen[i] == 'l')
-//         {
-//             pieceList['l'].push_back(make_pair(col[colPos], row));
-//         }
-//         else if (fen[i] == 'c')
-//         {
-//             pieceList['c'].push_back(make_pair(col[colPos], row));
-//         }
-//         else if (fen[i] == 'z')
-//         {
-//             pieceList['z'].push_back(make_pair(col[colPos], row));
-//         }
-//         //white pieces
-//         else if (fen[i] == 'P')
-//         {
-//             pieceList['P'].push_back(make_pair(col[colPos], row));
-//         }
-//         else if (fen[i] == 'S')
-//         {
-//             pieceList['S'].push_back(make_pair(col[colPos], row));
-//         }
-//         else if (fen[i] == 'G')
-//         {
-//             pieceList['G'].push_back(make_pair(col[colPos], row));
-//         }
-//         else if (fen[i] == 'M')
-//         {
-//             pieceList['M'].push_back(make_pair(col[colPos], row));
-//         }
-//         else if (fen[i] == 'E')
-//         {
-//             pieceList['E'].push_back(make_pair(col[colPos], row));
-//         }
-//         else if (fen[i] == 'L')
-//         {
-//             pieceList['L'].push_back(make_pair(col[colPos], row));
-//         }
-//         else if (fen[i] == 'C')
-//         {
-//             pieceList['C'].push_back(make_pair(col[colPos], row));
-//         }
-//         else if (fen[i] == 'Z')
-//         {
-//             pieceList['Z'].push_back(make_pair(col[colPos], row));
-//         }
-//         if (num == false)
-//         {
-//             colPos++;
-//         }
-//         num = false;
-//     }
-//     return pieceList;
-// }
 
 map<char, vector<pair<char, int>>> updatePieceList(map<char, vector<pair<char, int>>> pieceList, vector<vector<BoardState>> board)
 {
@@ -293,17 +179,6 @@ map<char, vector<pair<char, int>>> updatePieceList(map<char, vector<pair<char, i
     return pieceList;
 }
 
-// void updatePieces(int rows, int cols, vector<vector<BoardState>> board, map<char, vector<pair<char, int>>> &pieceList)
-// {
-//     if (board[rows][cols] == 1)
-//     {
-//     }
-// }
-// vector<string> makeFenArray(string fen)
-// {
-//     vector<string> newFen(7);
-//     for()
-// }
 
 void printBoard(vector<vector<BoardState>> board)
 {
@@ -647,30 +522,6 @@ vector<string> lionMoves(vector<vector<BoardState>> board, map<char, vector<pair
     int cols = col - 1;
     int rows = temp[0].second - 1;
 
-    // cout << temp[0].first << temp[0].second << endl;
-    //cout << "rows is: " << rows << endl;
-    //cout << "cols is: " << cols << endl;
-
-    //empty = 0,
-    //white pieces = 1-4
-    //black pieces = 5-8
-    //river = 9,
-    //wDen = 11,
-    //bDen = 55,
-
-    //normal
-    // cout << "[normal] - normal cols; normal rows: " << board[rows][cols] << endl;
-    // cout << "[normal] - output cols to test: " << column[cols] << rows + 1 << endl;
-    // //down
-    // cout << "[down] - cols-1; normal rows: " << board[rows - 1][cols] << endl;
-    // cout << "[down] - output cols to test: " << column[cols] << rows << endl;
-    // //left
-    // cout << "[left] - normal cols; rows-1: " << board[rows][cols - 1] << endl;
-    // //right
-    // cout << "[right] - normal cols; rows+1: " << board[rows][cols + 1] << endl;
-    // //down-left
-    // cout << "[down-left] - cols-1; rows-1: " << board[rows - 1][cols - 1] << endl;
-
     //black moves
     if (colourTurn == 'b')
     {
@@ -884,22 +735,9 @@ vector<string> lionMoves(vector<vector<BoardState>> board, map<char, vector<pair
     allMoves.resize(moves.size());
     for (int i = 0; i < moves.size(); i++)
     {
-        //cout << board[temp[0].second - 1][row - 1] << endl;
-        //    if (i != moves.size() - 1)
-        //      {
-        //cout << temp[0].first << temp[0].second << moves[i].first << moves[i].second << " ";
         allMoves[i] = temp[0].first + to_string(temp[0].second) + moves[i].first + to_string(moves[i].second);
-        //        }
-        // else
-        // {
-        //     //cout << temp[0].first << temp[0].second << moves[i].first << moves[i].second;
-        //     allMoves[i] = temp[0].first + temp[0].second + moves[i].first + moves[i].second;
-        // }
     }
     return allMoves;
-    // temp.clear();
-    // enemyTemp.clear();
-    // moves.clear();
 }
 
 vector<string> zebraMoves(vector<vector<BoardState>> board, map<char, vector<pair<char, int>>> pieceList, char colourTurn)
@@ -1067,22 +905,9 @@ vector<string> zebraMoves(vector<vector<BoardState>> board, map<char, vector<pai
     allMoves.resize(moves.size());
     for (int i = 0; i < moves.size(); i++)
     {
-        //cout << board[temp[0].second - 1][row - 1] << endl;
-        // if (i != moves.size() - 1)
-        // {
-        //cout << temp[0].first << temp[0].second << moves[i].first << moves[i].second << " ";
         allMoves[i] = temp[0].first + to_string(temp[0].second) + moves[i].first + to_string(moves[i].second);
-        // }
-        // else
-        // {
-        //     //cout << temp[0].first << temp[0].second << moves[i].first << moves[i].second;
-        //     allMoves[i] = temp[0].first + temp[0].second + moves[i].first + moves[i].second;
-        // }
     }
     return allMoves;
-
-    // temp.clear();
-    // moves.clear();
 }
 
 vector<string> elephantMoves(vector<vector<BoardState>> board, map<char, vector<pair<char, int>>> pieceList, char colourTurn)
@@ -1237,13 +1062,6 @@ vector<string> elephantMoves(vector<vector<BoardState>> board, map<char, vector<
 
         sort(totalMoves.begin(), totalMoves.end());
         return totalMoves;
-        // for (int i = 0; i < totalMoves.size(); i++)
-        // {
-        //     cout << totalMoves[i] << " ";
-        // }
-
-        // temp.clear();
-        // moves.clear();
     }
 }
 
@@ -1371,13 +1189,6 @@ vector<string> pawnMoves(vector<vector<BoardState>> board, map<char, vector<pair
 
         sort(totalMoves.begin(), totalMoves.end());
         return totalMoves;
-        // for (int i = 0; i < totalMoves.size(); i++)
-        // {
-        //     cout << totalMoves[i] << " ";
-        // }
-
-        // temp.clear();
-        // moves.clear();
     }
 }
 
@@ -1424,12 +1235,7 @@ tuple<vector<vector<BoardState>>, map<char, vector<pair<char, int>>>, string> do
         }
         tCol++;
     }
-
-    // if (move == "g4e4")
-    // {
-    //     cout << "Asdasd" << endl;
-    // }
-
+    
     for (int i = 0; i < board[3].size(); i++)
     {
         if (colourTurn == 'b')
@@ -1508,55 +1314,11 @@ tuple<vector<vector<BoardState>>, map<char, vector<pair<char, int>>>, string> do
         }
     }
 
-    // for (int i = 0; i < board[3].size(); i++)
-    // {
-    //     if (colourTurn == 'b')
-    //     {
-    //         if (board[3][i] >= 5 && board[3][i] <= 8 && riverPieces)
-    //         {
-    //             if (board[3][i] >= 5 && board[3][i] <= 8)
-    //             {
-    //                 if (fromRows == 3)
-    //                 {
-    //                     board[3][i] = river;
-    //                     break;
-    //                 }
-    //                 else
-    //                 {
-    //                     continue;
-    //                 }
-    //             }
-    //         }
-    //     }
-    //     else
-    //     {
-    //         if (board[3][i] >= 1 && board[3][i] <= 4 && riverPieces)
-    //         {
-    //             if (board[3][i] >= 1 && board[3][i] <= 4)
-    //             {
-    //                 if (fromRows == 3)
-    //                 {
-    //                     board[3][i] = river;
-    //                     break;
-    //                 }
-    //                 else
-    //                 {
-
-    //                     continue;
-    //                 }
-    //             }
-    //         }
-    //     }
-    // }
-
     board = boardSetup(board);
     string newFen = makeFen(board);
     pieceList.clear();
     pieceList = updatePieceList(pieceList, board);
 
-    //cout << "board in do move after the move has taken place:" << endl;
-    //printBoard(board);
-    //cout << endl;
     return make_tuple(board, pieceList, newFen);
 }
 
@@ -1699,11 +1461,6 @@ int checkLionCapture(vector<vector<BoardState>> board, map<char, vector<pair<cha
 
 int rawScore(vector<vector<BoardState>> board, map<char, vector<pair<char, int>>> pieceList, char colourTurn)
 {
-
-    // if (checkLionCapture(board, pieceList, colourTurn) == abs(10000))
-    // {
-    //     return checkLionCapture(board, pieceList, colourTurn);
-    // }
     int deltaScore = scoreCheck(pieceList, colourTurn);
     if (abs(deltaScore) == 10000)
     {
@@ -1717,25 +1474,10 @@ int rawScore(vector<vector<BoardState>> board, map<char, vector<pair<char, int>>
     // int side = colourTurn == 'w' ? 1 : -1;
     int myMoves = numMoves(board, pieceList, colourTurn);
     int enemyMoves = numMoves(board, pieceList, enemyColour);
-
-    // cout << "My No. Moves: " << myMoves << endl;
-    // cout << "My enemy No. Moves: " << enemyMoves << endl;
-    // cout << endl;
     int myAttackScore = attackScore(board, pieceList, colourTurn);
     int enemyAttackScore = attackScore(board, pieceList, enemyColour);
-
-    // cout << "My AttScore Moves: " << myAttackScore << endl;
-    // cout << "My enemy AttScore Moves: " << enemyAttackScore << endl;
-    // cout << endl;
     int deltaAttackScore = myAttackScore - enemyAttackScore;
-
     int deltaMove = myMoves - enemyMoves;
-
-    // cout << endl;
-    // cout << "deltaAttackScore: " << deltaAttackScore << endl;
-    // cout << "deltaScore: " << deltaScore << endl;
-    // cout << "deltaMove: " << deltaMove << endl;
-
     return deltaAttackScore + deltaScore + deltaMove;
 }
 //fix winning conditions above...
@@ -1743,28 +1485,17 @@ int rawScore(vector<vector<BoardState>> board, map<char, vector<pair<char, int>>
 string prevMoveMini(string move)
 {
     string oldMove = move[2] + to_string(move[3] - 48) + move[0] + to_string(move[1] - 48);
-    // cout << "1 " << move[2] << endl;
-    // cout << "2 " << move[3] << endl;
-    // cout << "3 " << move[0] << endl;
-    // cout << "4 " << move[1] << endl;
-    // cout << "prevMoveMini: " << oldMove << endl;
     return oldMove;
 }
 
 string prevMoveAB(string move)
 {
     string oldMove = move[2] + to_string(move[3] - 48) + move[0] + to_string(move[1] - 48);
-    // cout << "1 " << move[2] << endl;
-    // cout << "2 " << move[3] << endl;
-    // cout << "3 " << move[0] << endl;
-    // cout << "4 " << move[1] << endl;
-    // cout << "prevMoveAB: " << oldMove << endl;
     return oldMove;
 }
 
 int miniMax(vector<vector<BoardState>> board, map<char, vector<pair<char, int>>> pieceList, string fen, char colourTurn, int depth)
 {
-    //cout << colourTurn << " : " << depth << endl;
     string tempMove = "";
     if (gameState(board, pieceList) || depth <= 0)
     {
@@ -1789,7 +1520,6 @@ int miniMax(vector<vector<BoardState>> board, map<char, vector<pair<char, int>>>
             tempMove = move;
         }
     }
-    //cout << endl;
     miniBestMove = tempMove;
     return value;
 }
@@ -1807,7 +1537,6 @@ int alphaBeta(vector<vector<BoardState>> board, map<char, vector<pair<char, int>
     {
         if (move == prevMoveAB(playMoveAB))
         {
-            //cout << "curr move: " << move << " inverse move: " << prevMoveAB(ABbestMove) << endl;
             continue;
         }
 
@@ -1816,7 +1545,6 @@ int alphaBeta(vector<vector<BoardState>> board, map<char, vector<pair<char, int>
 
         if (eval >= beta)
         {
-            //ABbestMove = tempMove;
             return beta;
         }
         if (eval > alpha)
@@ -1826,7 +1554,6 @@ int alphaBeta(vector<vector<BoardState>> board, map<char, vector<pair<char, int>
         }
     }
     ABbestMove = tempMove;
-    // cout << "best move: " << bestMove << endl;
     return alpha;
 }
 
@@ -1835,7 +1562,7 @@ void simpleMove(vector<vector<BoardState>> &board, string bestMove, char colourT
     vector<char> column = {'a', 'b', 'c', 'd', 'e', 'f', 'g'};
     int fCol = 0;
     int tCol = 0;
-    //vector<string> riverPieces = {"-1", "-1", "-1", "-1", "-1", "-1", "-1"};
+
     bool riverPieces = false;
     //find the index for the col
     for (int j = 0; j < column.size(); j++)
@@ -1929,24 +1656,22 @@ void miniVsAlpha()
     {
         cout << "Turn Number: " << counter << endl;
         board = boardSetup(board);
-        //tempBoard = board;
-        //cout << "ABLastMove: " << prevMoveAB(playMoveAB) << endl;
         alphaBeta(board, pieceList, fen, 'w', 4, -1000000, 1000000);
         cout << "ABBestMove: " << ABbestMove << endl;
         playMoveAB = ABbestMove;
         simpleMove(board, ABbestMove, 'w');
         printBoard(board);
         cout << endl;
-        //tempBoard = board;
         fen = makeFen(board);
         pieceList.clear();
         pieceList = updatePieceList(pieceList, board);
+        
         if (pieceList['l'].size() == 0)
         {
             cout << "white Wins! " << endl;
             break;
         }
-        //cout << "MiniLastMove: " << prevMoveMini(playMoveMini) << endl;
+        
         miniMax(board, pieceList, fen, 'b', 2);
         cout << "miniBestMove: " << miniBestMove << endl;
         playMoveMini = miniBestMove;
@@ -1979,9 +1704,7 @@ void alphaVsMini()
     {
         cout << "Turn Number: " << counter << endl;
         board = boardSetup(board);
-        //tempBoard = board;
 
-        //cout << "MiniLastMove: " << prevMoveMini(miniBestMove) << endl;
         miniMax(board, pieceList, fen, 'w', 2);
         cout << "miniBestMove: " << miniBestMove << endl;
         playMoveMini = miniBestMove;
@@ -1997,14 +1720,13 @@ void alphaVsMini()
             break;
         }
 
-        //cout << "ABLastMove: " << prevMoveAB(ABbestMove) << endl;
         alphaBeta(board, pieceList, fen, 'b', 4, -1000000, 1000000);
         cout << "ABBestMove: " << ABbestMove << endl;
         playMoveAB = ABbestMove;
         simpleMove(board, ABbestMove, 'w');
         printBoard(board);
         cout << endl;
-        //tempBoard = board;
+        
         fen = makeFen(board);
         pieceList.clear();
         pieceList = updatePieceList(pieceList, board);
@@ -2023,62 +1745,7 @@ int main()
     //black is lowercase
     //white is uppercase
     vector<vector<BoardState>> board(7, vector<BoardState>(7));
-
     map<char, vector<pair<char, int>>> pieceList;
-    // int n;
-    // cin >> n;
-    // vector<string> fen(n);
-    // vector<char> colourTurn(n);
-    // vector<int> numTurn(n);
-    // vector<string> move(n);
-    //vector<vector<BoardState>> board1v1(7, vector<BoardState>(7));
     miniVsAlpha();
-    // cout << endl
-    //      << endl;
-    //alphaVsMini();
-    // for (int i = 0; i < n; i++)
-    // {
-    //     cin >> fen[i];
-    //     cin >> colourTurn[i];
-    //     cin >> numTurn[i];
-    //     //cin >> move[i];
-    // }
-
-    // while (numTurn[i] != 100 && abs(scoreCheck(pieceList, colourTurn[i]) == 10000))
-    // {
-    //     alphaBeta(board, pieceList, fen[i], 'w', 4, -1000000, 1000000);
-    //     miniMax(board, pieceList, fen[i], 'b', 2);
-    //     numTurn[i] += 1;
-    // }
-
-    // for (int i = 0; i < n; i++)
-    // {
-    //     board = boardSetup(board);
-    //     tuple<map<char, vector<pair<char, int>>>, vector<vector<BoardState>>> setUp = mapInit(pieceList, fen[i], board);
-    //     pieceList = get<0>(setUp);
-    //     board = get<1>(setUp);
-
-    //     cout << miniMax(board, pieceList, fen[i], colourTurn[i], 2) << endl;
-    //     // vector<string> lMoves = lionMoves(board, pieceList, colourTurn[i]);
-    //     // for (int i = 0; i < lMoves.size(); i++)
-    //     // {
-    //     //     cout << lMoves[i] << " ";
-    //     // }
-    //     // cout << endl;
-    //     //cout << numTurn[i] << endl;
-
-    //     //cout << rawScore(board, pieceList, colourTurn[i]) << endl;
-
-    //     //cout << alphaBeta(board, pieceList, fen[i], colourTurn[i], 4, -1000000, 1000000) << endl;
-    //     cout << "ABbestMove: " << ABbestMove << endl;
-    //     cout << "miniBestMove: " << miniBestMove << endl;
-    //     //clears the vecs
-    //     pieceList.clear();
-    //     for (auto &elem : board)
-    //     {
-    //         fill(elem.begin(), elem.end(), empty);
-    //     }
-
-    //     //cout << endl;
-    // }
+    
 }
